@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "i-count-down": "/static/iView/count-down/index"
+  
+},
+  "navigationBarTitleText": "拼团详情"
+}
