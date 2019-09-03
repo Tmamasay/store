@@ -47,11 +47,27 @@ const doDistrict= query=>{
         data: query
     })
 }
+//查询我的地址 
+const addressUserReceive= query=>{
+    return fetch({
+        url:`/api/addressUserReceive`,
+        method:'POST',
+        data: query
+    })
+}
 
 //新增或修改收货地址 
 const doAddAdr= query=>{
     return fetch({
         url:`/api/addressUserReceive/doAdd`,
+        method:'POST',
+        data: query
+    })
+}
+//根据id查询地址 
+const findById= query=>{
+    return fetch({
+        url:`/api/addressUserReceive/findById`,
         method:'POST',
         data: query
     })
@@ -66,6 +82,8 @@ const user={
     getOptions,//获取基础域名配置
     shopProduct,//获取商品列表
     doDistrict,//获取三级联动
+    addressUserReceive,//查询我的地址
+    findById,//根据id查询地址 
     doAddAdr//新增或修改收货地址 
 }
 export default user;
