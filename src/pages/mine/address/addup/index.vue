@@ -50,12 +50,13 @@
       />
       <!-- <i-input :value=" value4 " title="用户信息" disabled /> -->
       <i-cell title="设为默认地址">
-        <i-switch :value="defaultStatus" @change="onChange" slot="footer"></i-switch>
+        <i-switch :value="defaultStatus" @change="onChange"   slot="footer"></i-switch>
       </i-cell>
     </i-panel>
 
     <div>
       <button class="subm" @click="keepAdr">保存</button>
+      <button v-if="isshow" class="subm2" @click="doDelAdr">删除</button>
     </div>
   </div>
 </template>
@@ -70,6 +71,7 @@ export default {
 
   data() {
     return {
+      isshow:false,
       defaultStatus: false, //是否为默认地址
       name: "", //收件人
       phone: "", //手机号
@@ -120,6 +122,32 @@ export default {
     onChange() {
       this.defaultStatus = !this.defaultStatus;
     },
+    doDelAdr(id){
+      const param={
+        id: this.editId
+      }
+       this.$api.user
+        .doDelAdr(param)
+        .then(res => {
+          wx.showToast({
+            title: res.message,
+            icon: "none",
+            duration: 1000
+          });
+          setTimeout(e => {
+            // wx.redirectTo({
+            //   url: "/pages/mine/address/main"
+            // });
+             wx.navigateBack({
+              delta: 1
+            });
+          }, 1000);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      
+    },
     getAdrOne(id) {
       // debugger
       const param = {
@@ -131,8 +159,7 @@ export default {
           this.name = res.addressUserReceive.name;
           this.phone = res.addressUserReceive.phone;
           this.postCode = res.addressUserReceive.postCode;
-          this.defaultStatus =
-            res.addressUserReceive.defaultStatus == 1 ? true : false;
+          this.defaultStatus =res.addressUserReceive.defaultStatus == 0 ? true : false;
           this.detailAddress = res.addressUserReceive.detailAddress;
           this.value4 = `${res.addressUserReceive.province}${
             res.addressUserReceive.city
@@ -193,7 +220,7 @@ export default {
         param = {
           name: this.name,
           phone: this.phone,
-          defaultStatus: this.defaultStatus,
+          defaultStatus: this.defaultStatus?0:1,
           postCode: this.postCode,
           province: this.province,
           city: this.city,
@@ -217,8 +244,11 @@ export default {
           this.detailAddress = "";
           this.value4 = "";
           setTimeout(e => {
-            wx.redirectTo({
-              url: "/pages/mine/address/main"
+            // wx.redirectTo({
+            //   url: "/pages/mine/address/main"
+            // });
+             wx.navigateBack({
+              delta: 1
             });
           }, 1000);
         })
@@ -267,6 +297,7 @@ export default {
 
     if (this.$root.$mp.query.id) {
       debugger;
+      this.isshow=true
       this.getAdrOne(this.$root.$mp.query.id);
     }
   },
@@ -278,6 +309,7 @@ export default {
     this.defaultStatus = "";
     this.detailAddress = "";
     this.value4 = "";
+    this.isshow=false
   },
   onUnload() {
     // debugger
@@ -287,6 +319,7 @@ export default {
     this.defaultStatus = "";
     this.detailAddress = "";
     this.value4 = "";
+    this.isshow=false
   }
 };
 </script>
@@ -296,6 +329,12 @@ export default {
   width: 70%;
   margin: 20px auto 0 auto;
   background-color: #e61a94;
+  color: #fff;
+}
+.subm2 {
+  width: 70%;
+  margin: 20px auto 0 auto;
+  background-color: #8b888a;
   color: #fff;
 }
 </style>

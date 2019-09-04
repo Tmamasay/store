@@ -28,7 +28,7 @@
         <div class="leftPic">
           <p>
             <span style="font-size:16px !important">¥</span>
-            499
+            {{commodDetail.price||0}}
             <span class="peoplePr">¥99</span>
             <!-- <span class="peopleT">2人团</span> -->
           </p>
@@ -44,7 +44,8 @@
       </div>
     </div>
     <div class="pTTitle">
-      <p>大王短裤式纸尿裤XL48片加大号尿不湿号尿不湿（12kg-17kg）（维E系列）</p>
+      <!-- <p>大王短裤式纸尿裤XL48片加大号尿不湿号尿不湿（12kg-17kg）（维E系列）</p> -->
+      <p>{{commodDetail.subTitle}}</p>
       <div class="shareImg">
         <img src="../../../../static/images/share.png" alt srcset />
       </div>
@@ -71,8 +72,9 @@
     <div class="dzCont">
     <div class="GroupDz2">
         <p class="leftP2">送至</p>
-        <p class="leftM2">重庆市南岸区时代星光协信城7栋重庆市南岸区时代星光协信城7栋</p>
-        <div class="leftR2">
+        <!-- <p class="leftM2">重庆市南岸区时代星光协信城7栋重庆市南岸区时代星光协信城7栋</p> -->
+        <p class="leftM2">{{addressDefut.province}}{{addressDefut.city}}{{addressDefut.district}}{{addressDefut.detailAddress}}</p>
+        <div class="leftR2" @click="goCheckAdr">
           <div class="leftRImg2">
             <img src="../../../../static/images/more.png" alt srcset />
           </div>
@@ -81,7 +83,7 @@
       <div class="GroupDz2">
         <p class="leftP2">已选</p>
         <p class="leftM2">3段900克，1件</p>
-        <div class="leftR2">
+        <div class="leftR2" @click="pickGG">
           <div class="leftRImg2">
             <img src="../../../../static/images/more.png" alt srcset />
           </div>
@@ -133,6 +135,29 @@
         </div>
         
       </div>
+          <!-- 遮罩层 -->
+    <div class="shadow" v-if="chooseSize" @tap='hideModal'></div>
+    <!-- 上滑高度 -->
+    <div class='choosen' v-if="chooseSize" :animation='animationData'>
+    <!-- 内容 -->
+      <div class="container-box">
+        <div class="topGG">
+        <div class="ggImg">
+          <!-- <img src="" alt="" srcset=""> -->
+        </div>
+        <p><span style="font-size:16px !important">¥</span>999</p>
+        </div>
+        <div class="guiG">
+          <p class="gGTit">段位</p>
+          <div class="ggList">
+            <p class="PicList">200g</p>
+            <p class="PicList">200g</p>
+            <p class="PicList active">200g</p>
+          </div>
+        </div>
+      </div>
+      </div>
+       
 
   </div>
 </template>
@@ -144,38 +169,166 @@ import wxParse from 'mpvue-wxparse'
 export default {
   data() {
     return {
-     
+      commodityId:'',//课程id
+      commodDetail:null,
+      addressDefut:'',
       detailData:`<p><img src="http://pmspic-10004025.image.myqcloud.com/7380bd9e-b36b-4447-84e3-1a5cb7722139" title="http://pmspic-10004025.image.myqcloud.com/7380bd9e-b36b-4447-84e3-1a5cb7722139"/><img src="http://pmspic-10004025.image.myqcloud.com/448ee3fa-9bf3-4a3d-8f19-4e5c4d2f5718" title="http://pmspic-10004025.image.myqcloud.com/448ee3fa-9bf3-4a3d-8f19-4e5c4d2f5718"/><img src="http://pmspic-10004025.image.myqcloud.com/75c8efea-1d9e-4a04-af30-0aebe42fe726" title="http://pmspic-10004025.image.myqcloud.com/75c8efea-1d9e-4a04-af30-0aebe42fe726"/><img src="http://pmspic-10004025.image.myqcloud.com/a95dacc8-bf89-4ef7-a7a3-2710ecbfccf6" title="http://pmspic-10004025.image.myqcloud.com/a95dacc8-bf89-4ef7-a7a3-2710ecbfccf6"/><img src="http://pmspic-10004025.image.myqcloud.com/16ad6a26-1d79-4d6c-a7ec-77bbddd5870f" title="http://pmspic-10004025.image.myqcloud.com/16ad6a26-1d79-4d6c-a7ec-77bbddd5870f"/><img src="http://pmspic-10004025.image.myqcloud.com/95a11f91-1428-482b-ad8a-8686776f62e4" title="http://pmspic-10004025.image.myqcloud.com/95a11f91-1428-482b-ad8a-8686776f62e4"/><img src="http://pmspic-10004025.image.myqcloud.com/1f635bce-4cac-421a-93c9-5e7c2d93faf7" title="http://pmspic-10004025.image.myqcloud.com/1f635bce-4cac-421a-93c9-5e7c2d93faf7"/><img src="http://pmspic-10004025.image.myqcloud.com/49bd0f10-ccee-4fd7-a042-ab5719e8b070" title="http://pmspic-10004025.image.myqcloud.com/49bd0f10-ccee-4fd7-a042-ab5719e8b070"/><img src="http://pmspic-10004025.image.myqcloud.com/ad6ef7e9-3194-4d85-8e9e-e0db68d8da12" title="http://pmspic-10004025.image.myqcloud.com/ad6ef7e9-3194-4d85-8e9e-e0db68d8da12"/><img src="http://pmspic-10004025.image.myqcloud.com/64486a8f-33fc-4bd6-b3c8-4a8e9b81eb0b" title="http://pmspic-10004025.image.myqcloud.com/64486a8f-33fc-4bd6-b3c8-4a8e9b81eb0b"/><img src="http://pmspic-10004025.image.myqcloud.com/509ab8f5-d346-423d-8549-847207607248" title="http://pmspic-10004025.image.myqcloud.com/509ab8f5-d346-423d-8549-847207607248"/></p>`,
       setInt: null,
-      imgUrls: [
-        "http://pmspic-10004025.image.myqcloud.com/05be1989-8b8d-4510-b6cc-05ad4cb6426a",
-        "http://pmspic-10004025.image.myqcloud.com/8d42b5f5-4d01-4beb-ad4c-defcc94323a8",
-        "http://pmspic-10004025.image.myqcloud.com/c465039a-1c43-4aad-93b9-c38e67617891"
-      ]
+      imgUrls: [],
+      chooseSize:false,
+      animationData:null,
+      guigeName:["包装","段位","颜色"],
+      guiGList:null
+      
     };
   },
   computed: {},
   mounted() {
     // this.countTime();
+    
   },
   components: {
     // countdown
     wxParse
   },
 
-  methods: {
+  methods: { 
+    pickGG(){
+       if (!this.chooseSize) {
+        this.chooseSezi()
+      } else {
+        this.hideModal()
+      }
+
+    },
+  chooseSezi(){
+      // 用that取代this，防止不必要的情况发生
+      var that = this;
+      // 创建一个动画实例
+      var animation = wx.createAnimation({
+        // 动画持续时间
+        duration: 500,
+        // 定义动画效果，当前是匀速
+        timingFunction: 'ease'
+      })
+      // 将该变量赋值给当前动画
+      that.animation = animation
+      // 先在y轴偏移，然后用step()完成一个动画
+      animation.translateY(1000).step()
+      // 用setData改变当前动画
+      that.animationData=animation.export()
+      that.chooseSize=true
+      // that.setData({
+      //   // 通过export()方法导出数据
+      //   animationData: animation.export(),
+      //   // 改变view里面的Wx：if
+      //   chooseSize: true
+      // })
+      // 设置setTimeout来改变y轴偏移量，实现有感觉的滑动 滑动时间
+      setTimeout(function () {
+        animation.translateY(0).step()
+        that.animationData=animation.export()
+        // that.setData({
+        //   animationData: animation.export(),
+        //   clearcart: false
+        // })
+      }, 10)
+
+    },
+  hideModal(){
+      var that = this;
+    var animation = wx.createAnimation({
+      duration: 500,
+      timingFunction: 'ease'
+    })
+    that.animation = animation
+    animation.translateY(700).step()
+    that.animationData=animation.export()
+    // that.setData({
+    //   animationData: animation.export()
+    // })
+    setTimeout(function () {
+      animation.translateY(0).step()
+      that.animationData=animation.export()
+      that.chooseSize=false
+      // that.setData({
+      //   animationData: animation.export(),
+      //   chooseSize: false
+      // })
+    }, 500)
+
+    },
+    goCheckAdr(){
+      wx.navigateTo({
+        url: "/pages/mine/address/main" //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
+      });
+    },
+     async getDefaultAddress() {
+      wx.showToast({title: '', icon: 'loading', duration: 1000});
+      await this.$api.user
+        .getDefaultAddress()
+        .then(res => {
+          wx.hideToast()
+          // debugger
+          this.addressDefut=res.addressUserReceive
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    async findByProductId(id){//规格
+      const param={
+        productId:id
+      }
+      await this.$api.user
+        .findByProductId(param)
+        .then(res => {
+          // debugger
+          this.guiGList=res.shopSkuStockSp.list
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+     async findByIdDetail(id){//详情
+      const param={
+        id:id
+      }
+      await this.$api.user
+        .findByIdDetail(param)
+        .then(res => {
+          // debugger
+          const imgBeg=res.shopProduct.albumPics.split(",")
+          var that=this
+         imgBeg.forEach(element => {
+          that.imgUrls.push(`http://${that.$store.getters.options.attachment_aliyunoss_bucketname}.${that.$store.getters.options.attachment_aliyunoss_endpoint}${element}`);
+         });
+          this.commodDetail=res.shopProduct
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
    
   },
   onHide() {
+    this.imgUrls=[]
 
   },
   onUnload() {
- 
+ this.imgUrls=[]
   },
   created() {
   },
 
-  onShow() {}
+  onShow() {
+    this.commodityId = this.$root.$mp.query.id;
+    if (this.$root.$mp.query.id) {
+      this.findByProductId(this.$root.$mp.query.id)
+      this.findByIdDetail(this.$root.$mp.query.id)
+      this.getDefaultAddress()
+    }
+  }
 };
 </script>
 
@@ -581,5 +734,84 @@ font-size: 11px;
   font-family: Noto Sans S Chinese;
   font-weight: 400;
   color: #fff
+}
+
+/* 遮罩 */
+.shadow{
+  width: 100%;
+  height: 100%;
+  z-index: 80;
+  position: absolute;
+  top: 0;
+  background-color: #000;
+  opacity: 0.2;
+}
+/* 上滑高度 */
+.choosen{
+  width: 100%;
+  height: 80%; 
+  position: fixed;
+  bottom: 0;
+  background-color: #fff;
+  border-top-left-radius: 20rpx;
+  border-top-right-radius: 20rpx;
+  z-index: 98;
+}
+/* 内容 */
+.container-box {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  width: 90%;
+  border-radius: 15px;
+  margin: 15px auto 0 auto;
+  z-index: 98;
+}
+.topGG{
+  display: flex;
+  align-items: flex-end
+}
+.topGG .ggImg{
+  width: 120px;
+  height: 140px;
+  background-color: #EB6C73;
+}
+.topGG .ggImg img{
+ width: 100%;
+ height: 100%;
+}
+.topGG p{
+  font-size: 20px;
+  font-family: Noto Sans S Chinese;
+  font-weight: 600;
+  color: #fe647e;
+  margin-left: 20px
+}
+.guiG .gGTit{
+ font-size: 16px;
+  font-family: Noto Sans S Chinese;
+  font-weight: 500;
+  color: rgba(34, 34, 34, 1);
+  padding:15px 0px
+}
+.ggList{
+  display: flex;
+  flex-wrap: wrap;
+}
+.PicList{
+  display: inline-block;
+  font-size: 12px;
+  font-family: Noto Sans S Chinese;
+  font-weight: 400;
+  padding: 5px 10px;
+  color: rgba(34, 34, 34, .35);
+  border-radius: 20px;
+  background-color: rgba(155, 154, 154, 0.1);
+  margin-right: 5px;
+}
+.active{
+  border:#EB6C73 solid 1rpx;
+  color: #EB6C73;
+  background-color: #fff
 }
 </style>

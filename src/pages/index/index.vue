@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="ContAll">
     <search></search>
     <div class="lunBo">
-      <lunbo :imgUrls="imgUrls"></lunbo>
+      <lunbo></lunbo>
     </div>
     <div class="pingTuan">
       <div class="pTHead">
@@ -20,7 +20,39 @@
         </div>
       </div>
     </div>
-    <div class="tuiJian"></div>
+    <div class="tjCont">
+      <p class="tj1">精选</p>
+      <p class="tj2">为你推荐</p>
+    </div>
+    <div class="tjContent">
+      <div class="tuiJian" v-for="item in showPro" :key="item.id" @click="goProTJ(item.id)">
+        <div class="tjImg">
+          <img :src="item.pic" alt="" srcset="">
+        </div>
+        <p class="titTJ">{{item.name}}</p>
+        <p class="picTJ">
+          <span>¥</span>{{item.price}}
+        </p>
+      </div>
+      <!-- <div class="tuiJian">
+        <div class="tjImg">
+          <img src alt srcset />
+        </div>
+        <p class="titTJ">1664啤酒限量版本香薰礼品300盒1664啤酒限量版本香薰礼品300盒</p>
+        <p class="picTJ">
+          <span>¥</span>249
+        </p>
+      </div>
+      <div class="tuiJian">
+        <div class="tjImg">
+          <img src alt srcset />
+        </div>
+        <p class="titTJ">1664啤酒限量版本香薰礼品300盒1664啤酒限量版本香薰礼品300盒</p>
+        <p class="picTJ">
+          <span>¥</span>249
+        </p>
+      </div> -->
+    </div>
   </div>
 </template>
 
@@ -34,7 +66,7 @@ export default {
     return {
       current: "tab1",
       userInfo: "",
-      imgUrls:[],
+      imgUrls: [],
       ptList: [
         {
           category_id: 304737,
@@ -161,8 +193,12 @@ export default {
           stock_num: 1,
           type: 0
         }
-      ]
-    };
+      ],
+      page:1,//页数
+      pageSize:10,//条数
+      isBottom:false,
+      showPro:[]
+};
   },
   computed: {},
   components: {
@@ -175,40 +211,108 @@ export default {
       // debugger
       this.current = e.mp.detail.data.key;
     },
+    goProTJ(id){
+        wx.navigateTo({
+        url: `/pages/learn/comdetail/main?id=${id}` 
+      });
+    },
     godetail() {
       wx.navigateTo({
         url: "/pages/index/ptdetail/main" //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
       });
     },
-    async getAdvertise(){
-      await this.$api.user.getAdvertise().then(res=>{
-        var that=this
-          res.list.forEach(element => {
-           that.imgUrls.push(`http://${that.$store.getters.options.attachment_aliyunoss_bucketname}.${that.$store.getters.options.attachment_aliyunoss_endpoint}${element.path}`)
-            // debugger                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+    async getAdvertise() {
+      await this.$api.user.getAdvertise().then(res => {
+        var that = this;
+        res.list.forEach(element => {
+          
+          that.imgUrls.push(`http://${that.$store.getters.options.attachment_aliyunoss_bucketname}.${that.$store.getters.options.attachment_aliyunoss_endpoint}${element.path}`);
+          // console.log()
         });
-           
-        // debugger
-      })
+        
+      });
+    },
+    async shopProductList(page,pageSize){
+    const param = {
+        recommandStatus: 1,
+        page: page,
+        pageSize: pageSize
+      };
+      await this.$api.user
+        .shopProduct(param)
+        .then(res => {
+          if(!res.page.list.length||res.page.list.length<10){
+            this.isBottom=true
+          }
+          var that=this
+          res.page.list.forEach(element => {
+            const params={
+              id:element.id,
+              pic:`http://${
+              that.$store.getters.options.attachment_aliyunoss_bucketname
+            }.${that.$store.getters.options.attachment_aliyunoss_endpoint}${
+              element.pic
+            }`,
+              name:element.name,
+              price:element.price
+            }
+            this.showPro.push(params)
+            // debugger
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
-
+ mounted() {
+  
+ },
   created() {
-    
     // let app = getApp()
-  },
-
-  onShow() {
-    if(!this.$store.getters.options){
-      console.log('------------>')
-      console.log(this.$store.getters.options)
-      this.$store.dispatch("getOptions").then(res=>{
+    if (!this.$store.getters.options) {
+      console.log("------------>");
+      console.log(this.$store.getters.options);
+      this.$store.dispatch("getOptions").then(res => {
         // debugger
-                  console.log("域名信息保存成功------>");
-                  this.getAdvertise()
-                })
+        console.log("域名信息保存成功------>");
+        setTimeout(() => {
+           this.shopProductList(1,10)
+        }, 1000);
+        // this.getAdvertise();
+       
+      });
+    }else{
+      // debugger
+      // this.getAdvertise();
+      this.shopProductList(1,10)
     }
     
+  },
+  onReachBottom() {
+    console.log("触底了");
+    if(this.isBottom){
+      return
+    }else{
+       this.shopProductList(this.page++,this.pageSize)
+    }
+   
+  },
+  onShow() {
+
+
+    // if (!this.$store.getters.options) {
+    //   console.log("------------>");
+    //   console.log(this.$store.getters.options);
+    //   this.$store.dispatch("getOptions").then(res => {
+    //     // debugger
+    //     console.log("域名信息保存成功------>");
+    //     this.getAdvertise();
+    //   });
+    // }else{
+    //   this.getAdvertise();
+    // }
+
     // wx.navigateTo({
     //         url: '/pages/login/main',   //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
     //     })
@@ -235,12 +339,14 @@ export default {
                 code: code
               })
               .then(res => {
-                if(res.sessionId){
-                   //登录获取token
-              that.$store.dispatch("getSessionWX", res.sessionId).then(res => {
-                console.log("session保存成功------>");
-                // that.sharekey = mpvue.getStorageSync("Admin-Token");
-              });
+                if (res.sessionId) {
+                  //登录获取token
+                  that.$store
+                    .dispatch("getSessionWX", res.sessionId)
+                    .then(res => {
+                      console.log("session保存成功------>");
+                      // that.sharekey = mpvue.getStorageSync("Admin-Token");
+                    });
                 }
                 //  debugger
               })
@@ -256,18 +362,22 @@ export default {
       });
     }
     // }else{}
-    
   },
   onHide() {
     // debugger
+    
   },
   onUnload() {
+    
     // debugger
   }
 };
 </script>
 
 <style scoped>
+.ContAll{
+  overflow: hidden;
+}
 .lunBo {
   width: 90%;
   /* height: 34px; */
@@ -354,5 +464,70 @@ export default {
   font-family: Noto Sans S Chinese;
   font-weight: 400;
   color: rgba(153, 153, 153, 1);
+}
+.tjCont {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.tjCont .tj1 {
+  font-size: 18px;
+  font-family: Noto Sans S Chinese;
+  font-weight: 600;
+  color: rgba(34, 34, 34, 1);
+}
+.tjCont .tj2 {
+  font-size: 14px;
+  font-family: Noto Sans S Chinese;
+  font-weight: 400;
+  color: rgba(34, 34, 34, 0.5);
+}
+.tjContent {
+  display: flex;
+  flex-direction: row;
+  padding: 15px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+.tuiJian {
+  display: flex;
+  width: 150px;
+  flex-direction: column;
+  /* align-items: center; */
+  padding: 8px;
+  margin: 5px;
+  box-shadow: 0px 0px 10px 0px rgba(240, 206, 223, 0.3);
+  border-radius: 10px;
+  flex-wrap: wrap;
+}
+.tuiJian .titTJ {
+  font-size: 13px;
+  font-family: Noto Sans S Chinese;
+  font-weight: 400;
+  color: rgba(34, 34, 34, 1);
+  padding-top: 10px;
+}
+.tuiJian .picTJ {
+  font-size: 15px;
+  font-family: Noto Sans S Chinese;
+  font-weight: 600;
+  color: rgba(255, 110, 21, 1);
+}
+.tuiJian .picTJ span {
+  font-size: 13px;
+}
+.tuiJian .tjImg {
+  width: 140px;
+  height: 150px;
+   align-self:  center;
+   overflow: hidden;
+  /*display: flex;
+  justify-content: center; */
+
+}
+.tuiJian .tjImg .img {
+  width: 100%;
+  height: 100%;
 }
 </style>

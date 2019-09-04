@@ -13,6 +13,9 @@
             <img src="../../../../static/images/xg.png" alt srcset @click="changeAdr(item.id)" />
           </div>
         </div>
+          <i-cell title="默认地址">
+         <i-switch :value="item.defaultStatus==0?true:false" @change="onChange(item.id,item.defaultStatus)" slot="footer"></i-switch>
+         </i-cell>
       </div>
       </div>
       <div class="adressNone" v-else>
@@ -34,12 +37,14 @@
 
 export default {
   components: {
+    
     // card
   },
 
   data() {
     return {
-      adressList:[]
+      adressList:[],
+      defaultStatus: false, //是否为默认地址
     };
   },
   created() {
@@ -47,20 +52,40 @@ export default {
     // let key_token=this.$store.getters.user.token
   },
   methods: {
+    onChange(id,defaultStatus) {
+      wx.showToast({title: '设置中', icon: 'loading', duration: 10000});
+      // this.defaultStatus = !this.defaultStatus;
+      const param={
+        id:id,
+        defaultStatus:!defaultStatus==0?0:1
+      }
+      this.$api.user
+        .doDefaultStatus(param)
+        .then(res => {
+          wx.hideToast()
+         this.getAddressList()
+        })
+        .catch(err => {
+          console.log(err);
+        });
+      
+    },
     addAdress() {
       wx.navigateTo({
         url: "/pages/mine/address/addup/main" //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
       });
     },
     changeAdr(id){
-      wx.redirectTo({
+      wx.navigateTo({
         url: `/pages/mine/address/addup/main?id=${id}` //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
       });
     },
     async getAddressList() {
+      wx.showToast({title: '', icon: 'loading', duration: 1000});
       await this.$api.user
         .addressUserReceive()
         .then(res => {
+          wx.hideToast()
           this.adressList=res.list
         })
         .catch(err => {
@@ -68,7 +93,9 @@ export default {
         });
     }
   },
-  onShow() {}
+  onShow() {
+    this.getAddressList()
+  }
 };
 </script>
 
