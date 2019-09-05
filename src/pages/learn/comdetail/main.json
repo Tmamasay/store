@@ -1,3 +1,8 @@
 {
+  "usingComponents": {
+    "i-count-down": "/static/iView/count-down/index",
+    "i-input-number": "/static/iView/input-number/index"
+  
+},
   "navigationBarTitleText": "搜索"
 }

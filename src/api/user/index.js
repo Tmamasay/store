@@ -115,6 +115,31 @@ const findByIdDetail= query=>{
         data: query
     })
 }
+//============购物车=============
+//添加购物车
+const doAddShopCart= query=>{
+    return fetch({
+        url:`/api/shopCartItem/doAdd`,
+        method:'POST',
+        data: query
+    })
+}
+//下单 
+const shopOrder= query=>{
+    return fetch({
+        url:`/api/shopOrder`,
+        method:'POST',
+        data: query
+    })
+}
+//微信支付
+const weChatUnifiedorder= query=>{
+    return fetch({
+        url:`/api/pay/weChatUnifiedorder`,
+        method:'POST',
+        data: query
+    })
+}
 
 
 const user={
@@ -131,6 +156,9 @@ const user={
     getDefaultAddress,//查询我的默认地址
     shopProduct,//获取商品列表
     findByProductId,//通过ID获取商品规格
-    findByIdDetail//通过ID获取商品详情 不含规格
+    findByIdDetail,//通过ID获取商品详情 不含规格
+    doAddShopCart,//添加到购物车
+    shopOrder,//商品下单
+    weChatUnifiedorder//微信支付
 }
 export default user;
