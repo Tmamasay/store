@@ -280,77 +280,77 @@ export default {
         });
     },
     async playBill() {
-      // this.isdisable = true;
-      // wx.navigateTo({
-      //   url: `/pages/learn/pay/main` //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
-      // });
-      wx.showToast({ title: "支付中", icon: "loading", duration: 1000 });
-      const param = {
-        payType: "微信",
-        sourceType: "微信小程序",
-        addressUserReceiveId: this.addressId,
-        note: "",
-        invoiceId: "",
-        shopOrderItemList: [
-          {
-            productId: this.commodityId,
-            productSkuId: this.pickID,
-            num: this.numPic
-          }
-        ]
-      };
-      await this.$api.user
-        .shopOrder(param)
-        .then(res => {
-          // wx.hideToast();
-          // debugger;
-          const oderLine={
-            orderSn:res.shopOrder.orderSn
-          }
-          this.$api.user
-            .weChatUnifiedorder(oderLine)
-            .then(res => {
-              wx.hideToast();
-              wx.requestPayment({
-							'timeStamp': res.map.timeStamp,
-							'nonceStr': res.map.nonceStr,
-							'package': res.map.package,
-							'signType': 'MD5',
-							'paySign': res.map.paySign,
-							'success': function(res) {
-								console.log(res);
-								// wx.redirectTo({
-								// 	url: '/pages/storefk/paySuccess/main?paysign=1'
-								// })
-                // that.defult = 0;
-                	this.isdisable = false;
+      this.isdisable = true;
+      wx.navigateTo({
+        url: `/pages/learn/pay/main?productId=${this.commodityId}&productSkuId=${this.pickID}&num=${this.numPic}` //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
+      });
+      // wx.showToast({ title: "支付中", icon: "loading", duration: 1000 });
+      // const param = {
+      //   payType: "微信",
+      //   sourceType: "微信小程序",
+      //   addressUserReceiveId: this.addressId,
+      //   note: "",
+      //   invoiceId: "",
+      //   shopOrderItemList: [
+      //     {
+      //       productId: this.commodityId,
+      //       productSkuId: this.pickID,
+      //       num: this.numPic
+      //     }
+      //   ]
+      // };
+      // await this.$api.user
+      //   .shopOrder(param)
+      //   .then(res => {
+      //     // wx.hideToast();
+      //     // debugger;
+      //     const oderLine={
+      //       orderSn:res.shopOrder.orderSn
+      //     }
+      //     this.$api.user
+      //       .weChatUnifiedorder(oderLine)
+      //       .then(res => {
+      //         wx.hideToast();
+      //         wx.requestPayment({
+			// 				'timeStamp': res.map.timeStamp,
+			// 				'nonceStr': res.map.nonceStr,
+			// 				'package': res.map.package,
+			// 				'signType': 'MD5',
+			// 				'paySign': res.map.paySign,
+			// 				'success': function(res) {
+			// 					console.log(res);
+			// 					// wx.redirectTo({
+			// 					// 	url: '/pages/storefk/paySuccess/main?paysign=1'
+			// 					// })
+      //           // that.defult = 0;
+      //           	this.isdisable = false;
 
-							},
-							'fail': function(res) {
-								// wx.redirectTo({
-								// 	url: '/pages/storefk/payfailure/main'
-								// })
-								this.isdisable = false;
+			// 				},
+			// 				'fail': function(res) {
+			// 					// wx.redirectTo({
+			// 					// 	url: '/pages/storefk/payfailure/main'
+			// 					// })
+			// 					this.isdisable = false;
 
-							},
-							'complete': function(res) {
-								// console.log(res);
-                // that.defult = 0;
-                	this.isdisable = false;
+			// 				},
+			// 				'complete': function(res) {
+			// 					// console.log(res);
+      //           // that.defult = 0;
+      //           	this.isdisable = false;
 
-							}
-						})
-              debugger;
-              // this.addressDefut = res.addressUserReceive;
-            })
-            .catch(err => {
-              console.log(err);
-            });
-          // this.addressDefut = res.addressUserReceive;
-        })
-        .catch(err => {
-          console.log(err);
-        });
+			// 				}
+			// 			})
+      //         debugger;
+      //         // this.addressDefut = res.addressUserReceive;
+      //       })
+      //       .catch(err => {
+      //         console.log(err);
+      //       });
+      //     // this.addressDefut = res.addressUserReceive;
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
     },
     handleChange1(e) {
       // debugger
