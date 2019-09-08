@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="billAdr">
-      <div class="topAdr">
+    <div class="billAdr" v-if="addressDefut2">
+      <div class="topAdr" >
         <p>{{addressDefut2.name||0}}</p>
         <p>{{addressDefut2.phone||0}}</p>
       </div>
@@ -23,7 +23,7 @@
           <div class="pricLi">
             <p class="orderPic">
               <span style="font-size:16px !important">¥</span>
-              {{commodDetai2.price||0}}
+              {{commodDetail2.price||0}}
             </p>
             <p class="shul">x {{num}}</p>
           </div>
@@ -58,7 +58,9 @@
           {{commodDetail2.price*num}}
         </p>
         <div class="gobtn">
-          <button @click="payMoney" :disabled="isdisabled">提交订单</button>
+          <form @submit="formSubmit" report-submit="true">
+          <button form-type="submit" @click="payMoney" :disabled="isdisabled">提交订单</button>
+          </form>
         </div>
       </div>
     </div>
@@ -69,7 +71,9 @@
 export default {
   data() {
     return {
-      addressDefut2: null,
+      addressDefut2:{
+        name:''
+      },
       addressId: null,
       productId: null, //商品id
       productSkuId: null, //规格id
@@ -77,7 +81,9 @@ export default {
       note: null,
       isdisabled: false,
       imgUrls: null,
-      commodDetail2: unll
+      commodDetail2:{
+        subTitle:''
+      }
     };
   },
   computed: {},
@@ -98,6 +104,27 @@ export default {
   components: {},
 
   methods: {
+    formSubmit(e){
+      const formlist=[];
+      formlist.push(e.mp.detail.formId)
+      const parms={
+        formIds:formlist
+      }
+      this.$api.user
+        .doAddFormIds(parms)
+        .then(res => {
+          debugger
+          // wx.hideToast();
+          // debugger
+          // this.addressDefut2 = res.addressUserReceive;
+          // this.addressId2 = res.addressUserReceive.id;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+    },
+    
     findByIdDetail(id) {
       //详情
       const param = {
@@ -120,15 +147,15 @@ export default {
           console.log(err);
         });
     },
-    async getDefaultAddress() {
+     getDefaultAddress() {
       wx.showToast({ title: "", icon: "loading", duration: 1000 });
-      await this.$api.user
+       this.$api.user
         .getDefaultAddress()
         .then(res => {
           wx.hideToast();
           // debugger
           this.addressDefut2 = res.addressUserReceive;
-          this.addressId2 = res.addressUserReceive.id;
+          this.addressId = res.addressUserReceive.id;
         })
         .catch(err => {
           console.log(err);
@@ -136,6 +163,7 @@ export default {
     },
     async payMoney() {
       this.isdisabled = true;
+      const that=this
       wx.showToast({ title: "支付中", icon: "loading", duration: 1000 });
       const param = {
         payType: "微信",
@@ -154,6 +182,7 @@ export default {
       await this.$api.user
         .shopOrder(param)
         .then(res => {
+          if(res.state=='ok'){ 
           // wx.hideToast();
           // debugger;
           const oderLine = {
@@ -163,6 +192,8 @@ export default {
             .weChatUnifiedorder(oderLine)
             .then(res => {
               wx.hideToast();
+                      debugger
+              
               wx.requestPayment({
                 timeStamp: res.map.timeStamp,
                 nonceStr: res.map.nonceStr,
@@ -175,20 +206,21 @@ export default {
                   // 	url: '/pages/storefk/paySuccess/main?paysign=1'
                   // })
                   // that.defult = 0;
-                  this.isdisabled = false;
+                  that.isdisabled = false;
                 },
                 fail: function(res) {
                   // wx.redirectTo({
                   // 	url: '/pages/storefk/payfailure/main'
                   // })
-                  this.isdisabled = false;
+                  that.isdisabled = false;
                 },
                 complete: function(res) {
                   // console.log(res);
                   // that.defult = 0;
-                  this.isdisabled = false;
+                  that.isdisabled = false;
                 }
               });
+              
               debugger;
               // this.addressDefut = res.addressUserReceive;
             })
@@ -196,6 +228,11 @@ export default {
               console.log(err);
             });
           // this.addressDefut = res.addressUserReceive;
+          }else{
+                debugger
+                wx.showToast({ title: res.message+'', icon: "", duration: 1500 });
+
+              }
         })
         .catch(err => {
           console.log(err);

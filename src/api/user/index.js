@@ -124,6 +124,14 @@ const doAddShopCart= query=>{
         data: query
     })
 }
+//查询购物车
+const shopCartItem= query=>{
+    return fetch({
+        url:`/api/shopCartItem`,
+        method:'POST',
+        data: query
+    })
+}
 //下单 
 const shopOrder= query=>{
     return fetch({
@@ -136,6 +144,14 @@ const shopOrder= query=>{
 const weChatUnifiedorder= query=>{
     return fetch({
         url:`/api/pay/weChatUnifiedorder`,
+        method:'POST',
+        data: query
+    })
+}
+//上传formid
+const doAddFormIds= query=>{
+    return fetch({
+        url:`/api/wechat/mp/doAddFormIds`,
         method:'POST',
         data: query
     })
@@ -159,6 +175,8 @@ const user={
     findByIdDetail,//通过ID获取商品详情 不含规格
     doAddShopCart,//添加到购物车
     shopOrder,//商品下单
-    weChatUnifiedorder//微信支付
+    weChatUnifiedorder,//微信支付
+    doAddFormIds,//上传formid
+    shopCartItem//查询购物车
 }
 export default user;

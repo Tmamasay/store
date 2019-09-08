@@ -121,7 +121,7 @@
         </div>
         <p>商城</p>
       </div>
-      <div class="tfLeft">
+      <div class="tfLeft" @click="goShopCart">
         <div class="tfLeftImg">
           <img src="../../../../static/images/guw.png" alt srcset />
         </div>
@@ -197,16 +197,20 @@
           <div class="pTFooter2">
             <div class="tfMiddle2" @click="pushGWC">
               <!-- <p class="f1">¥249</p> -->
-              <p class="f2">加入购物车</p>
+              <form @submit="formSubmit" report-submit="true">
+              <button form-type="submit" style=" background-color:#f7dde6;" class="f2">加入购物车</button>
+              <!-- <p class="f2">加入购物车</p> -->
+              </form>
+              
             </div>
-            <div class="tfRight2" v-if="!isdisable" @click="playBill">
+            <div class="tfRight2"  @click="playBill">
               <!-- <p class="p1">¥249</p> -->
-              <p class="p2">立即购买</p>
+              
+            <form @submit="formSubmit" report-submit="true">
+              <button form-type="submit" style=" background-color: #eb6c73;" class="p2">立即购买</button>
+            </form>
             </div>
-            <div class="tfRight3" v-else>
-              <!-- <p class="p1">¥249</p> -->
-              <p class="p2">立即购买</p>
-            </div>
+    
           </div>
         </div>
       </div>
@@ -261,6 +265,32 @@ export default {
   },
 
   methods: {
+    goShopCart(){
+       wx.navigateTo({
+        url: `/pages/ShopCart/main` //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
+      });
+
+    },
+    formSubmit(e){
+      const formlist=[];
+      formlist.push(e.mp.detail.formId)
+      const parms={
+        formIds:formlist
+      }
+      this.$api.user
+        .doAddFormIds(parms)
+        .then(res => {
+          debugger
+          // wx.hideToast();
+          // debugger
+          // this.addressDefut2 = res.addressUserReceive;
+          // this.addressId2 = res.addressUserReceive.id;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+    },
     async pushGWC() {
       wx.showToast({ title: "加入中", icon: "loading", duration: 1000 });
       const param = {

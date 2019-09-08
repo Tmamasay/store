@@ -16,7 +16,8 @@
     "pages/mine/about/main",
     "pages/counter/main",
     "pages/searchshow/main",
-    "pages/login/main"
+    "pages/login/main",
+    "pages/ShopCart/main"
   ],
   "window": {
     "backgroundTextStyle": "light",
