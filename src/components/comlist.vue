@@ -1,6 +1,6 @@
 <template>
   <div>
-   <div class="comListCont" v-for="item in listDt" :key="item" @click="goComDetail(item.id)">
+   <div class="comListCont" v-for="item in showPro" :key="item" @click="goComDetail(item.id)">
      <div class="comListLeft">
        <div class="listLeftImg">
          <img src="http://pmspic-10004025.image.myqcloud.com/9ce04793-4c63-4416-bbf0-3182b49d04c4" alt="" srcset="">
@@ -30,6 +30,7 @@
 <script>
 
 export default {
+   props: ['showPro'],
   data () {
     return {
       listDt:['','','']

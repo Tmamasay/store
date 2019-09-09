@@ -132,6 +132,14 @@ const shopCartItem= query=>{
         data: query
     })
 }
+//计算购物车价格
+const doPrice= query=>{
+    return fetch({
+        url:`/api/shopCartItem/doPrice`,
+        method:'POST',
+        data: query
+    })
+}
 //下单 
 const shopOrder= query=>{
     return fetch({
@@ -152,6 +160,14 @@ const weChatUnifiedorder= query=>{
 const doAddFormIds= query=>{
     return fetch({
         url:`/api/wechat/mp/doAddFormIds`,
+        method:'POST',
+        data: query
+    })
+}
+//商品订单列表
+const findOrder= query=>{
+    return fetch({
+        url:`/api/shopOrder/findOrder`,
         method:'POST',
         data: query
     })
@@ -177,6 +193,8 @@ const user={
     shopOrder,//商品下单
     weChatUnifiedorder,//微信支付
     doAddFormIds,//上传formid
-    shopCartItem//查询购物车
+    shopCartItem,//查询购物车
+    doPrice,//计算购物车价格
+    findOrder//商品订单列表
 }
 export default user;

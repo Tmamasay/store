@@ -308,7 +308,7 @@ export default {
 }
 .orderImg {
   width: 100px;
-  height: 120px;
+  height: 110px;
   background-color: bisque;
   flex: 0 0 25%;
 }

@@ -4,7 +4,7 @@
     <div class="lunBo">
       <lunbo></lunbo>
     </div>
-    <div class="pingTuan">
+    <div class="pingTuan" v-if="false">
       <div class="pTHead">
         <p>超值拼团</p>
         <div class="goPT">更多拼团</div>

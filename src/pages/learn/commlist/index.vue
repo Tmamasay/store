@@ -1,7 +1,7 @@
 <template>
   <div>
    <search></search>
-   <comlist></comlist>
+   <comlist showPro="showPro"></comlist>
    <!-- <div class="comListCont" v-for="item in listDt" :key="item">
      <div class="comListLeft">
        <div class="listLeftImg">
@@ -37,6 +37,7 @@ export default {
   data () {
     return {
       // listDt:['','','']
+      showPro:[]
     }
   },
  computed:{
@@ -45,8 +46,43 @@ export default {
     search,
     comlist
   },
+  mounted() {
+    this.shopProductList(1,20)
+  },
 
   methods: {
+     async shopProductList(page,pageSize){
+    const param = {
+        recommandStatus: 0,
+        page: page,
+        pageSize: pageSize
+      };
+      await this.$api.user
+        .shopProduct(param)
+        .then(res => {
+          if(!res.page.list.length||res.page.list.length<10){
+            this.isBottom=true
+          }
+          var that=this
+          res.page.list.forEach(element => {
+            const params={
+              id:element.id,
+              pic:`http://${
+              that.$store.getters.options.attachment_aliyunoss_bucketname
+            }.${that.$store.getters.options.attachment_aliyunoss_endpoint}${
+              element.pic
+            }`,
+              name:element.name,
+              price:element.price
+            }
+            this.showPro.push(params)
+            // debugger
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
     
   },
 
