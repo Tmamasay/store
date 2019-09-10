@@ -30,7 +30,7 @@
         
       </div>
       <div class="quickIcon">
-        <div class="iconList">
+        <div class="iconList" @click="goBill">
           <div class="iconImg">
             <img
               src="https://cmspic-10004025.image.myqcloud.com/ef9be030-60b4-11e8-b556-75e8438acf09_size_54x54"
@@ -186,6 +186,12 @@ export default {
     // let key_token=this.$store.getters.user.token
   },
   methods: {
+    goBill(){
+      wx.navigateTo({
+        url: "/pages/mine/comOrders/main" //订单界面
+      });
+
+    },
     login(){
       wx.navigateTo({
         url: "/pages/login/main" //登录页面

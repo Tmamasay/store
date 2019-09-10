@@ -2,7 +2,7 @@ Component({
     externalClasses: ['i-class'],
 
     relations: {
-        '../tabs/index': {
+        '../tabs1/index': {
             type: 'parent'
         }
     },
@@ -43,7 +43,7 @@ Component({
             this.setData({ scroll });
         },
         handleClickItem () {
-            const parent = this.getRelationNodes('../tabs/index')[0];
+            const parent = this.getRelationNodes('../tabs1/index')[0];
             parent.emitEvent(this.data.key);
         }
     }

@@ -47,7 +47,8 @@
       <!-- <p>大王短裤式纸尿裤XL48片加大号尿不湿号尿不湿（12kg-17kg）（维E系列）</p> -->
       <p>{{commodDetail.subTitle}}</p>
       <div class="shareImg">
-        <img src="../../../../static/images/share.png" alt srcset />
+        <button  open-type='share' style="background-image: url('http://leciit.oss-cn-chengdu.aliyuncs.com/attachment/20190910/724f84614bc84f2ebddf60d3dc2c3cb0.png');background-size: 100% 100%;background-repeat: no-repeat;"> </button>
+        <!-- <img src="../../../../static/images/share.png" alt srcset /> -->
       </div>
     </div>
     <div class="baoZCont">
@@ -222,6 +223,7 @@
 // import card from '@/components/card' #61D2FC dbdbdb
 // import countdown from "@/components/countdown";
 import wxParse from "mpvue-wxparse";
+import {getToken} from '@/utils/auth';
 export default {
   data() {
     return {
@@ -263,7 +265,26 @@ export default {
     // countdown
     wxParse
   },
+  onShareAppMessage(){
+        var that = this
+        console.log("============>")
+       
+    		return {
+					title: "快来购买呀",
+          desc:that.$store.getters.userinfo.nickName,
+          imageUrl:this.imgUrls[0],
+					path: '/pages/index/main?userId='+getToken(), // 路径，传递参数到指定页面。
+					success: function(res) {　　　　　　 // 转发成功之后的回调
+						wx.showToast({
+							title:'转发成功',
+							icon: 'none',
+							duration: 1000
+						}); 
+						console.log('转发成功，触发回调')　　　　　　　　　　
+					},
+				}
 
+  },
   methods: {
     goShopCart(){
        wx.navigateTo({
@@ -721,6 +742,14 @@ export default {
   width: 30px;
   height: 30px;
   overflow: hidden;
+  background-color: #fff
+}
+.shareImg button {
+  width: 30px;
+  height: 30px;
+  background-color: #fff
+  /* overflow: hidden;
+  background-color: #eb6c73 */
 }
 .shareImg img {
   width: 100%;

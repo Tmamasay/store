@@ -1,7 +1,7 @@
 <template>
   <div>
    <search></search>
-   <comlist showPro="showPro"></comlist>
+   <comlist v-if="splist.length" :splist="splist"></comlist>
    <!-- <div class="comListCont" v-for="item in listDt" :key="item">
      <div class="comListLeft">
        <div class="listLeftImg">
@@ -36,8 +36,8 @@ import comlist from "@/components/comlist";
 export default {
   data () {
     return {
-      // listDt:['','','']
-      showPro:[]
+      splist:[]
+      // showProA:[]
     }
   },
  computed:{
@@ -47,23 +47,26 @@ export default {
     comlist
   },
   mounted() {
-    this.shopProductList(1,20)
+    // this.shopProductList(1,20)
   },
 
   methods: {
-     async shopProductList(page,pageSize){
+     async shopProductList(page,pageSize,id){
     const param = {
         recommandStatus: 0,
         page: page,
-        pageSize: pageSize
+        pageSize: pageSize,
+        productCategoryId:id
       };
       await this.$api.user
         .shopProduct(param)
         .then(res => {
+          this.splist=[]
           if(!res.page.list.length||res.page.list.length<10){
             this.isBottom=true
           }
           var that=this
+          if(res.page.list.length){       
           res.page.list.forEach(element => {
             const params={
               id:element.id,
@@ -75,9 +78,12 @@ export default {
               name:element.name,
               price:element.price
             }
-            this.showPro.push(params)
+            this.splist.push(params)
             // debugger
           });
+          }else{
+            this.splist=[]
+          }
         })
         .catch(err => {
           console.log(err);
@@ -91,6 +97,10 @@ export default {
   },
   
   onShow(){
+   if (this.$root.$mp.query.id) {
+    this.shopProductList(1,20,this.$root.$mp.query.id)
+   }
+
   }
 }
 </script>

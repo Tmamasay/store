@@ -202,16 +202,16 @@ export default {
                 paySign: res.map.paySign,
                 success: function(res) {
                   console.log(res);
-                  // wx.redirectTo({
-                  // 	url: '/pages/storefk/paySuccess/main?paysign=1'
-                  // })
+                  wx.redirectTo({
+                  	url: '/pages/learn/success/main'
+                  })
                   // that.defult = 0;
                   that.isdisabled = false;
                 },
                 fail: function(res) {
-                  // wx.redirectTo({
-                  // 	url: '/pages/storefk/payfailure/main'
-                  // })
+                  wx.redirectTo({
+                  	url: '/pages/learn/fail/main'
+                  })
                   that.isdisabled = false;
                 },
                 complete: function(res) {

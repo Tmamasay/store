@@ -115,6 +115,15 @@ const findByIdDetail= query=>{
         data: query
     })
 }
+//商品分类 
+const shopProductCategory= query=>{
+    return fetch({
+        url:`/api/shopProductCategory`,
+        method:'POST',
+        data: query
+    })
+}
+
 //============购物车=============
 //添加购物车
 const doAddShopCart= query=>{
@@ -165,6 +174,14 @@ const doAddFormIds= query=>{
     })
 }
 //商品订单列表
+const findOrderItem= query=>{
+    return fetch({
+        url:`/api/shopOrder/findOrderItem`,
+        method:'POST',
+        data: query
+    })
+}
+//订单详情
 const findOrder= query=>{
     return fetch({
         url:`/api/shopOrder/findOrder`,
@@ -172,6 +189,35 @@ const findOrder= query=>{
         data: query
     })
 }
+//=============孕育信息========
+//查询孕育信息
+const gestation= query=>{
+    return fetch({
+        url:`/api/gestation`,
+        method:'POST',
+        data: query
+    })
+}
+
+
+//添加孕育信息
+const doAddStation= query=>{
+    return fetch({
+        url:`/api/gestation/doAdd`,
+        method:'POST', 
+        data: query
+    })
+}
+//==========物流==========
+//确认收货 
+const doReceive= query=>{
+    return fetch({
+        url:`/api/shopOrder/doReceive`,
+        method:'POST', 
+        data: query
+    })
+}
+
 
 
 const user={
@@ -187,6 +233,7 @@ const user={
     doDelAdr,//删除默认地址
     getDefaultAddress,//查询我的默认地址
     shopProduct,//获取商品列表
+    shopProductCategory,//商品分类
     findByProductId,//通过ID获取商品规格
     findByIdDetail,//通过ID获取商品详情 不含规格
     doAddShopCart,//添加到购物车
@@ -195,6 +242,12 @@ const user={
     doAddFormIds,//上传formid
     shopCartItem,//查询购物车
     doPrice,//计算购物车价格
-    findOrder//商品订单列表
+    findOrder,//商品订单列表
+    findOrderItem,//订单详情
+    gestation,//查询孕育信息
+    doAddStation,//添加孕育信息
+    doReceive//确认收货
+
+
 }
 export default user;

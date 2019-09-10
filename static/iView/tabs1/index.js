@@ -2,7 +2,7 @@ Component({
     externalClasses: ['i-class'],
 
     relations: {
-        '../tab/index': {
+        '../tab1/index': {
             type: 'child',
             linked () {
                 this.changeCurrent();
@@ -38,7 +38,7 @@ Component({
 
     methods: {
         changeCurrent (val = this.data.current) {
-            let items = this.getRelationNodes('../tab/index');
+            let items = this.getRelationNodes('../tab1/index');
             const len = items.length;
 
             if (len > 0) {

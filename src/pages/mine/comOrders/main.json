@@ -1,8 +1,7 @@
 {
   "usingComponents": {
-    "i-cell-group": "/static/iView/cell-group/index",
-    "i-cell": "/static/iView/cell/index",
-    "i-icon": "/static/iView/icon/index"
+    "i-tabs-d": "/static/iView//tabs1/index",
+    "i-tab-d": "/static/iView/tab1/index"
 },
-  "navigationBarTitleText": "谭老师数学小学版"
+  "navigationBarTitleText": "订单管理"
 }

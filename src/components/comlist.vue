@@ -1,18 +1,19 @@
 <template>
   <div>
-   <div class="comListCont" v-for="item in showPro" :key="item" @click="goComDetail(item.id)">
+   <div class="comListCont" v-for="item in splist" :key="item" @click="goComDetail(item.id)">
      <div class="comListLeft">
        <div class="listLeftImg">
          <img src="http://pmspic-10004025.image.myqcloud.com/9ce04793-4c63-4416-bbf0-3182b49d04c4" alt="" srcset="">
        </div>
      </div>
      <div class="comListMiddle">
-       <p class="cLTitle">英国牛栏山婴儿奶粉（0-8月）高级配方惠氏启赋配方奶粉3段</p>
+       <p class="cLTitle">{{item.name}}</p>
        <div class="comPric">
-         <p><span>¥</span>369</p>
+         <p><span>¥</span>{{item.price}}</p>
          <div class="GWC">
            <div class="GW">
            <img src="../../static/images/gw.png" alt="">
+           <!-- <img :src="item.pic" alt=""> -->
           </div>        
          </div>
        </div>
@@ -30,10 +31,10 @@
 <script>
 
 export default {
-   props: ['showPro'],
+   props: ['splist'],
   data () {
     return {
-      listDt:['','','']
+      // listDt:['','']
     }
   },
  computed:{
@@ -43,9 +44,9 @@ export default {
   },
 
   methods: {
-    goComDetail(){
+    goComDetail(id){
        wx.navigateTo({
-            url: '/pages/learn/comdetail/main',
+            url: `/pages/learn/comdetail/main?id=${id}`,
         })
     }
     
@@ -56,6 +57,8 @@ export default {
   },
   
   onShow(){
+    console.log(this.splist)
+    debugger
   }
 }
 </script>
@@ -65,11 +68,11 @@ export default {
   width: 95%;
   margin: 10px auto;
   display: flex;
-  /* flex: 1; */
+  flex: 1;
   /* align-items: center; */
 }
 .comListLeft{
-  /* flex: 0 0 30%; */
+  flex: 0 0 30%;
   display: flex;
   justify-content:space-between;
   align-items: center
@@ -82,12 +85,15 @@ export default {
   overflow: hidden;
 }
 .comListMiddle{
-  /* flex: 0 0 65%; */
+  flex: 0 0 65%;
    font-size: 15px;
   font-family: Noto Sans S Chinese;
   font-weight: 500;
   color: rgba(34, 34, 34, 1);
-  margin-left: 6px;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content:space-around
   
 }
 .comPric{
@@ -124,6 +130,10 @@ export default {
   width: 100%;
   height: 100%;
 }
+.Vlog{
+  /* align-self:flex-end; */
+}
+
 .Vlog span{
   display:inline-block;
   font-size: 12px;
@@ -140,6 +150,10 @@ export default {
   border: 1rpx solid #91AFE7;
   color: #91AFE7 !important;
   margin-left: 8px;
+
+}
+.comListRight{
+  flex: 0 0 5%;
 
 }
 </style>
