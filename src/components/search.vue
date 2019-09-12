@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     goSearch(){
- wx.navigateTo({
+     wx.navigateTo({
             url: '/pages/searchshow/main',   //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
         })
     

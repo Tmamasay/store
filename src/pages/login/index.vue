@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-bind:style="{height:height+'px',}">
-      <img src="../../../static/images/bg.jpg" alt srcset />
+      <img :src="bgimg" alt srcset />
     </div>
     <div class>
       <!-- <button class="denglu" @getuserinfo="onGotUserInfo" open-type="getUserInfo">授权微信用户信息</button> -->
@@ -19,15 +19,20 @@
 </template>
 
 <script>
+import { setUserId } from '@/utils/auth'
 export default {
   data() {
     return {
-      height: "240"
+      height: "240",
       // listDt:['','','']
+      bgimg:''
     };
   },
   computed: {},
   components: {},
+  mounted() {
+    this.bgimg=this.noneimg=`http://${ this.$store.getters.options.attachment_aliyunoss_bucketname}.${this.$store.getters.options.attachment_aliyunoss_endpoint}/attachment/20190911/4cbc12c15a654b85baf36620aff3758a.jpg`
+  },
   methods: {
     imageLoad() {
       // var h = 750/300;
@@ -52,8 +57,11 @@ export default {
       //   console.log("用户信息保存成功------>");
       // });
       console.log(e.target);
+      
       this.$store.dispatch("LoginByWX", e.target).then(res => {
         console.log("token保存成功------>");
+        // debugger
+        setUserId(res.userId)
       //      wx.switchTab({
       //   url: "/pages/mine/main" //我的页面
       // });

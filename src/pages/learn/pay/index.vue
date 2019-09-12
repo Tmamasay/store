@@ -1,13 +1,13 @@
 <template>
   <div>
-    <div class="billAdr" v-if="addressDefut2">
+    <div class="billAdr" v-if="addressId">
       <div class="topAdr" >
         <p>{{addressDefut2.name||0}}</p>
         <p>{{addressDefut2.phone||0}}</p>
       </div>
       <div class="bomAdr">
         <p>{{addressDefut2.province}}{{addressDefut2.city}}{{addressDefut2.district}}{{addressDefut2.detailAddress}}</p>
-        <div>
+        <div @click="goCheckAdr">
           <img src="../../../../static/images/xg.png" alt srcset />
         </div>
       </div>
@@ -104,6 +104,11 @@ export default {
   components: {},
 
   methods: {
+    goCheckAdr() {
+      wx.navigateTo({
+        url: "/pages/mine/address/main" //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
+      });
+    },
     formSubmit(e){
       const formlist=[];
       formlist.push(e.mp.detail.formId)
@@ -162,6 +167,7 @@ export default {
         });
     },
     async payMoney() {
+      if(this.addressId){
       this.isdisabled = true;
       const that=this
       wx.showToast({ title: "支付中", icon: "loading", duration: 1000 });
@@ -229,14 +235,27 @@ export default {
             });
           // this.addressDefut = res.addressUserReceive;
           }else{
-                debugger
+                // debugger
                 wx.showToast({ title: res.message+'', icon: "", duration: 1500 });
-
+                setTimeout(() => {
+                  wx.hideToast();
+                }, 1000);
               }
         })
         .catch(err => {
           console.log(err);
         });
+        }else{
+          var that=this
+          wx.showToast({ title: "请填写默认地址", icon: "none", duration: 1000 });
+          setTimeout(() => {
+            that.goCheckAdr()
+            wx.hideToast();
+            
+          }, 1000);
+    }
+    
+
     }
   },
 

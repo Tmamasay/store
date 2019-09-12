@@ -1,3 +1,6 @@
 {
+  "usingComponents": {
+    "i-load-more": "/static/iView/load-more/index"
+},
   "navigationBarTitleText": "搜索"
 }

@@ -71,9 +71,8 @@
       <div class="GroupDz2">
         <p class="leftP2">送至</p>
         <!-- <p class="leftM2">重庆市南岸区时代星光协信城7栋重庆市南岸区时代星光协信城7栋</p> -->
-        <p
-          class="leftM2"
-        >{{addressDefut.province}}{{addressDefut.city}}{{addressDefut.district}}{{addressDefut.detailAddress}}</p>
+        <p class="leftM2" v-if="addressId">{{addressDefut.province}}{{addressDefut.city}}{{addressDefut.district}}{{addressDefut.detailAddress}}</p>
+        <p class="leftM2" v-else>请选择地址</p>
         <div class="leftR2" @click="goCheckAdr">
           <div class="leftRImg2">
             <img src="../../../../static/images/more.png" alt srcset />
@@ -104,9 +103,11 @@
     <div class="tuWen">
       <p class="twJs">图文介绍</p>
       <div>
-        <wxParse :content="detailData" />
+        <!-- <wxParse :content="detailData" /> -->
+        <wxParse :content="commodDetail.detailMobileHtml?commodDetail.detailMobileHtml:'无'" />
       </div>
     </div>
+    <div style="width:100%;height:80px"></div>
     <div class="pTFooter"> 
     <button open-type="contact" :send-message-title="commodDetail.subTitle" :send-message-img="imgUrls[0]" show-message-card="true" :send-message-path="sharePath" style="background-color: #fff">
       <div class="tfLeft">
@@ -116,7 +117,7 @@
         <p>客服</p>
       </div>
       </button>
-      <div class="tfLeft">
+      <div class="tfLeft" @click="goStore">
         <div class="tfLeftImg">
           <img src="../../../../static/images/sc.png" alt srcset />
         </div>
@@ -144,8 +145,11 @@
       <!-- 内容 -->
       <div class="container-box">
         <div class="topGG">
-          <div class="ggImg">
+          <div class="ggImg" v-if="picImg">
             <img :src="picImg" alt srcset />
+          </div>
+          <div class="ggImg" v-else>
+            <!-- <img :src="picImg" alt srcset /> -->
           </div>
           <p>
             <span style="font-size:16px !important">¥</span>
@@ -223,13 +227,18 @@
 // import card from '@/components/card' #61D2FC dbdbdb
 // import countdown from "@/components/countdown";
 import wxParse from "mpvue-wxparse";
-import {getToken} from '@/utils/auth';
+import {getToken,getUserId,getUserinfo} from '@/utils/auth';
+
 export default {
   data() {
     return {
       commodityId: "", //课程id
-      commodDetail: null,
-      addressDefut: "",
+      commodDetail: {
+        price:0
+      },
+      addressDefut:{
+        province:''
+      },
       detailData: `<p><img src="http://pmspic-10004025.image.myqcloud.com/7380bd9e-b36b-4447-84e3-1a5cb7722139" title="http://pmspic-10004025.image.myqcloud.com/7380bd9e-b36b-4447-84e3-1a5cb7722139"/><img src="http://pmspic-10004025.image.myqcloud.com/448ee3fa-9bf3-4a3d-8f19-4e5c4d2f5718" title="http://pmspic-10004025.image.myqcloud.com/448ee3fa-9bf3-4a3d-8f19-4e5c4d2f5718"/><img src="http://pmspic-10004025.image.myqcloud.com/75c8efea-1d9e-4a04-af30-0aebe42fe726" title="http://pmspic-10004025.image.myqcloud.com/75c8efea-1d9e-4a04-af30-0aebe42fe726"/><img src="http://pmspic-10004025.image.myqcloud.com/a95dacc8-bf89-4ef7-a7a3-2710ecbfccf6" title="http://pmspic-10004025.image.myqcloud.com/a95dacc8-bf89-4ef7-a7a3-2710ecbfccf6"/><img src="http://pmspic-10004025.image.myqcloud.com/16ad6a26-1d79-4d6c-a7ec-77bbddd5870f" title="http://pmspic-10004025.image.myqcloud.com/16ad6a26-1d79-4d6c-a7ec-77bbddd5870f"/><img src="http://pmspic-10004025.image.myqcloud.com/95a11f91-1428-482b-ad8a-8686776f62e4" title="http://pmspic-10004025.image.myqcloud.com/95a11f91-1428-482b-ad8a-8686776f62e4"/><img src="http://pmspic-10004025.image.myqcloud.com/1f635bce-4cac-421a-93c9-5e7c2d93faf7" title="http://pmspic-10004025.image.myqcloud.com/1f635bce-4cac-421a-93c9-5e7c2d93faf7"/><img src="http://pmspic-10004025.image.myqcloud.com/49bd0f10-ccee-4fd7-a042-ab5719e8b070" title="http://pmspic-10004025.image.myqcloud.com/49bd0f10-ccee-4fd7-a042-ab5719e8b070"/><img src="http://pmspic-10004025.image.myqcloud.com/ad6ef7e9-3194-4d85-8e9e-e0db68d8da12" title="http://pmspic-10004025.image.myqcloud.com/ad6ef7e9-3194-4d85-8e9e-e0db68d8da12"/><img src="http://pmspic-10004025.image.myqcloud.com/64486a8f-33fc-4bd6-b3c8-4a8e9b81eb0b" title="http://pmspic-10004025.image.myqcloud.com/64486a8f-33fc-4bd6-b3c8-4a8e9b81eb0b"/><img src="http://pmspic-10004025.image.myqcloud.com/509ab8f5-d346-423d-8549-847207607248" title="http://pmspic-10004025.image.myqcloud.com/509ab8f5-d346-423d-8549-847207607248"/></p>`,
       setInt: null,
       imgUrls: [],
@@ -267,13 +276,12 @@ export default {
   },
   onShareAppMessage(){
         var that = this
-        console.log("============>")
-       
+        console.log(this.commodDetail.subTitle)
     		return {
-					title: "快来购买呀",
-          desc:that.$store.getters.userinfo.nickName,
+					title:this.commodDetail.subTitle,
+          desc:getUserinfo().nickName,
           imageUrl:this.imgUrls[0],
-					path: '/pages/index/main?userId='+getToken(), // 路径，传递参数到指定页面。
+					path: '/pages/index/main?userId='+getUserId(), // 路径，传递参数到指定页面。
 					success: function(res) {　　　　　　 // 转发成功之后的回调
 						wx.showToast({
 							title:'转发成功',
@@ -286,10 +294,20 @@ export default {
 
   },
   methods: {
+    goStore(){
+         wx.switchTab({
+            url: '/pages/learn/main' //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
+          });
+    },
     goShopCart(){
+       if(getToken()){
        wx.navigateTo({
         url: `/pages/ShopCart/main` //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
       });
+       }else{
+         this.loginIn()
+
+       }
 
     },
     formSubmit(e){
@@ -312,14 +330,24 @@ export default {
         });
 
     },
-    async pushGWC() {
+     loginIn(){
+       wx.showToast({ title: "未登录", icon:"none", duration: 1000 });
+       setTimeout(() => {
+         wx.navigateTo({
+        url: "/pages/login/main" //登录页面
+        });
+       }, 1000);
+  
+    },
+     pushGWC() {
+   
       wx.showToast({ title: "加入中", icon: "loading", duration: 1000 });
       const param = {
         productId: this.commodityId,
         productSkuId: this.pickID,
         quantity: this.numPic
       };
-      await this.$api.user
+       this.$api.user
         .doAddShopCart(param)
         .then(res => {
           wx.hideToast();
@@ -330,7 +358,8 @@ export default {
           console.log(err);
         });
     },
-    async playBill() {
+     playBill() {
+       
       this.isdisable = true;
       wx.navigateTo({
         url: `/pages/learn/pay/main?productId=${this.commodityId}&productSkuId=${this.pickID}&num=${this.numPic}` //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
@@ -402,6 +431,7 @@ export default {
       //   .catch(err => {
       //     console.log(err);
       //   });
+       
     },
     handleChange1(e) {
       // debugger
@@ -435,11 +465,13 @@ export default {
         if (that.signInt == 3) {
           that.pickID = element.id;
           that.stock = element.stock;
-          that.picImg = `http://${
-            that.$store.getters.options.attachment_aliyunoss_bucketname
-          }.${that.$store.getters.options.attachment_aliyunoss_endpoint}${
-            element.pic
-          }`;
+          // debugger
+          if(element.pic){
+            that.picImg = `https://${that.$store.getters.options.attachment_aliyunoss_bucketname}.${that.$store.getters.options.attachment_aliyunoss_endpoint}${element.pic}`;
+          }else{
+            that.picImg=null
+          }
+          
           that.picPric = element.price;
           that.beginYX = that.pickSp.join(" ");
           // debugger
@@ -463,11 +495,16 @@ export default {
     },
 
     pickGG() {
+      if(getToken()){
       if (!this.chooseSize) {
         this.chooseSezi();
       } else {
         this.hideModal();
       }
+      }else{
+         this.loginIn()
+
+       }
     },
     chooseSezi() {
       // 用that取代this，防止不必要的情况发生
@@ -525,9 +562,13 @@ export default {
       }, 500);
     },
     goCheckAdr() {
+       if(getToken()){
       wx.navigateTo({
         url: "/pages/mine/address/main" //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
       });
+       }else{
+         this.loginIn()
+       }
     },
     async getDefaultAddress() {
       wx.showToast({ title: "", icon: "loading", duration: 1000 });
@@ -537,7 +578,7 @@ export default {
           wx.hideToast();
           // debugger
           this.addressDefut = res.addressUserReceive;
-          this.addressId = res.addressUserReceive.id;
+          this.addressId = res.addressUserReceive.id?res.addressUserReceive.id:0;
         })
         .catch(err => {
           console.log(err);
@@ -548,6 +589,7 @@ export default {
       const param = {
         productId: id
       };
+       
       await this.$api.user
         .findByProductId(param)
         .then(res => {
@@ -607,6 +649,7 @@ export default {
           // debugger
           const imgBeg = res.shopProduct.albumPics.split(",");
           var that = this;
+          if(imgBeg.length){       
           imgBeg.forEach(element => {
             that.imgUrls.push(
               `http://${
@@ -616,7 +659,13 @@ export default {
               }${element}`
             );
           });
-          this.commodDetail = res.shopProduct;
+          
+            }else{
+              that.imgUrls=[]
+
+            }
+            this.commodDetail = res.shopProduct;
+          // debugger
         })
         .catch(err => {
           console.log(err);
@@ -626,12 +675,16 @@ export default {
   onHide() {
     this.imgUrls = [];
     this.beginYX = "";
+    this.numPic=1,
     this.pickSp = [];
+    this.guiGList=[]
   },
   onUnload() {
     this.imgUrls = [];
+    this.numPic=1,
     this.beginYX = "";
     this.pickSp = [];
+    this.guiGList=[]
   },
   created() {},
 
@@ -653,7 +706,7 @@ export default {
   width: 100%;
   height: 375px;
   /* border: 1rpx solid rgba(218, 218, 218, 1); */
-  background-color: bisque;
+  /* background-color: bisque; */
 }
 .ptContImg img {
   width: 100%;
@@ -954,7 +1007,7 @@ export default {
   align-items: center;
   flex: 1;
   height: 50px;
-  border-bottom: 1rpx solid rgba(153, 153, 153, 0.4);
+  border-bottom: 1rpx solid rgba(153, 153, 153, 0.3);
 }
 .dzCont {
   /* margin-top: 10px; */
@@ -988,6 +1041,11 @@ export default {
   bottom: 0;
   display: flex;
   flex: 1;
+}
+.pTFooter button{
+  border-radius: 0px !important;
+  width: 100%;
+  border: 0px
 }
 .pTFooter2 {
   width: 100%;

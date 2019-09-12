@@ -106,7 +106,7 @@ const user = {
 									console.log('新用户保存token和用户类型')
                   commit('SET_TOKEN', data);//保存token
                   setToken(res.token)//保存token到本地缓存
-                  resolve()
+                  resolve(res)
 								}
 							}).catch((error)=>{
                 reject(error)

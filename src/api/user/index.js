@@ -208,6 +208,22 @@ const doAddStation= query=>{
         data: query
     })
 }
+//根据id查询孕育信息
+const stationfindById= query=>{
+    return fetch({
+        url:`/api/gestation/findById`,
+        method:'POST', 
+        data: query
+    })
+}
+//删除孕育信息
+const dostationDel= query=>{
+    return fetch({
+        url:`/api/gestation/doDel`,
+        method:'POST', 
+        data: query
+    })
+}
 //==========物流==========
 //确认收货 
 const doReceive= query=>{
@@ -217,7 +233,7 @@ const doReceive= query=>{
         data: query
     })
 }
-
+//==============搜索===========
 
 
 const user={
@@ -246,6 +262,8 @@ const user={
     findOrderItem,//订单详情
     gestation,//查询孕育信息
     doAddStation,//添加孕育信息
+    stationfindById,//根据id查询孕育信息
+    dostationDel,//删除孕育信息
     doReceive//确认收货
 
 

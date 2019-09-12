@@ -1,6 +1,11 @@
 {
-  "backgroundTextStyle": "light",
+  "usingComponents": {
+    "i-load-more": "/static/iView/load-more/index"
+},
 	"navigationBarTextStyle":"white",
-  "navigationBarTitleText": "兰熙母婴"
-  
+  "navigationBarTitleText": "兰熙母婴",
+  "enablePullDownRefresh":true,
+  "onReachBottom":true,
+  "backgroundColor":"#fff",
+ "backgroundTextStyle":"dark"
 }

@@ -522,7 +522,7 @@ font-size: 13px;
   align-items: center;
   flex: 1;
   height: 50px;
-  border-bottom: 1rpx solid rgba(153, 153, 153, 0.4);
+  border-bottom: 1rpx solid rgba(153, 153, 153, 0.3);
 }
 .dzCont{
   /* margin-top: 10px; */

@@ -3,7 +3,7 @@
    <div class="comListCont" v-for="item in splist" :key="item" @click="goComDetail(item.id)">
      <div class="comListLeft">
        <div class="listLeftImg">
-         <img src="http://pmspic-10004025.image.myqcloud.com/9ce04793-4c63-4416-bbf0-3182b49d04c4" alt="" srcset="">
+         <img :src="item.pic" alt="" srcset="">
        </div>
      </div>
      <div class="comListMiddle">
@@ -84,6 +84,10 @@ export default {
   border-radius: 5px;
   overflow: hidden;
 }
+.listLeftImg img{
+  width: 100%;
+  height: 100%;
+ }
 .comListMiddle{
   flex: 0 0 65%;
    font-size: 15px;

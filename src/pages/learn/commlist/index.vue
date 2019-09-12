@@ -25,7 +25,8 @@
      </div>
      <div class="comListRight"></div>
    </div> -->
-    
+    <i-load-more v-if="isBottom" tip="暂无更多数据" :loading="!isBottom" />
+    <i-load-more v-if="!isBottom" tip="加载中" :loading="!isBottom" />
   </div>
 </template>
 
@@ -36,7 +37,10 @@ import comlist from "@/components/comlist";
 export default {
   data () {
     return {
-      splist:[]
+      splist:[],
+      isBottom:false,
+      page:2,
+      pageSize:5
       // showProA:[]
     }
   },
@@ -53,7 +57,7 @@ export default {
   methods: {
      async shopProductList(page,pageSize,id){
     const param = {
-        recommandStatus: 0,
+        // recommandStatus: 0,
         page: page,
         pageSize: pageSize,
         productCategoryId:id
@@ -61,9 +65,11 @@ export default {
       await this.$api.user
         .shopProduct(param)
         .then(res => {
-          this.splist=[]
-          if(!res.page.list.length||res.page.list.length<10){
+          if(!res.page.list.length){
+            // debugger
+            this.page--
             this.isBottom=true
+            return
           }
           var that=this
           if(res.page.list.length){       
@@ -91,14 +97,22 @@ export default {
     }
     
   },
-
+   onReachBottom() {
+    console.log("触底了");
+    // if(this.isBottom){
+    //   return
+    // }else{
+       this.shopProductList(this.page++,this.pageSize)
+    // }
+   
+  },
   created () {
     // let app = getApp()
   },
   
   onShow(){
    if (this.$root.$mp.query.id) {
-    this.shopProductList(1,20,this.$root.$mp.query.id)
+    this.shopProductList(1,5,this.$root.$mp.query.id)
    }
 
   }
@@ -106,5 +120,6 @@ export default {
 </script>
 
 <style scoped>
+
 
 </style>

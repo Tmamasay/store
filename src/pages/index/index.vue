@@ -53,6 +53,8 @@
         </p>
       </div> -->
     </div>
+    <i-load-more v-if="isBottom" tip="暂无更多数据" :loading="!isBottom" />
+    <i-load-more v-if="!isBottom" tip="加载中" :loading="!isBottom" />
   </div>
 </template>
 
@@ -194,8 +196,8 @@ export default {
           type: 0
         }
       ],
-      page:1,//页数
-      pageSize:10,//条数
+      page:2,//页数
+      pageSize:5,//条数
       isBottom:false,
       showPro:[]
 };
@@ -234,15 +236,18 @@ export default {
     },
     async shopProductList(page,pageSize){
     const param = {
-        recommandStatus: 1,
+        recommandStatus: 0,
         page: page,
         pageSize: pageSize
       };
       await this.$api.user
         .shopProduct(param)
         .then(res => {
-          if(!res.page.list.length||res.page.list.length<10){
+          if(!res.page.list.length){
+            // debugger
+            this.page--
             this.isBottom=true
+            return
           }
           var that=this
           res.page.list.forEach(element => {
@@ -277,7 +282,7 @@ export default {
         // debugger
         console.log("域名信息保存成功------>");
         setTimeout(() => {
-           this.shopProductList(1,10)
+           this.shopProductList(1,5)
         }, 1000);
         // this.getAdvertise();
        
@@ -285,18 +290,23 @@ export default {
     }else{
       // debugger
       // this.getAdvertise();
-      this.shopProductList(1,10)
+      this.shopProductList(1,5)
     }
     
   },
   onReachBottom() {
     console.log("触底了");
-    if(this.isBottom){
-      return
-    }else{
+    // if(this.isBottom){
+    //   return
+    // }else{
        this.shopProductList(this.page++,this.pageSize)
-    }
+    // }
    
+  },
+   async onPullDownRefresh() {
+    console.log("下拉");
+    this.onLoad()
+    wx.stopPullDownRefresh( )
   },
   onShow() {
 
@@ -332,11 +342,13 @@ export default {
           var code = res.code;
           if (code) {
             console.log("获取用户登录凭证：" + code);
-
+            console.log("获取用户id凭证：" + that.$root.$mp.query.userId);
             // --------- 发送凭证 ------------------
-            that.$api.user
+       
+           that.$api.user
               .code2session({
-                code: code
+                code: code,
+                userId:that.$root.$mp.query.userId?that.$root.$mp.query.userId:''
               })
               .then(res => {
                 if (res.sessionId) {
@@ -360,6 +372,8 @@ export default {
           }
         }
       });
+    }else{
+      // his.shopProductList(1,10)
     }
     // }else{}
   },

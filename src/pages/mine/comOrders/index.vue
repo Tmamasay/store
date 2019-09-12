@@ -30,10 +30,14 @@
     </div>
     <div v-else>
       <div class="noneImg">
-        <img src="../../../../static/images/none.png" alt="">
+        <!-- <img src="../../../../static/images/none.png" alt=""> -->
+        <img :src="noneimg" alt="">
       </div>
       <p class="titNone">您暂时没有订单哟～</p>
     </div>
+    <!-- <i-load-more v-if="!isBottom" tip="加载中" :loading="true" />
+     <i-load-more v-if="isBottom" tip="暂无更多数据" :loading="!isBottom" /> -->
+     
   </div>
 </template>
 
@@ -50,11 +54,16 @@ export default {
       current: "待付款",
       page:1,
       pageSize:10,
+      isBottom:false,
       orderList:[],
+      noneimg:''
     };
   },
   created() {
     // let key_token=this.$store.getters.user.token
+  },
+  mounted() {
+    this.noneimg=`http://${ this.$store.getters.options.attachment_aliyunoss_bucketname}.${this.$store.getters.options.attachment_aliyunoss_endpoint}/attachment/20190911/1597d857129d4d288de6773a0c26e401.png`
   },
   methods: {
     makeOrder(id){
@@ -134,14 +143,21 @@ export default {
         })
         .then(res => {
           wx.hideToast();
+          if(!res.page.list.length){
+            // debugger
+            this.page--
+            this.isBottom=true
+            return
+          }
           res.page.list.forEach(element => {
             element.orderItemList[0].productInfo.pic=`http://${
             this.$store.getters.options.attachment_aliyunoss_bucketname
           }.${this.$store.getters.options.attachment_aliyunoss_endpoint}${
             element.orderItemList[0].productInfo.pic
           }` 
+          this.orderList.push(element)
           });
-          this.orderList=res.page.list
+          // this.orderList=res.page.list
           // debugger
           
 
@@ -152,6 +168,7 @@ export default {
     },
     handleChange(e) {
       // debugger
+       this.page=1
       this.current = e.mp.detail.key;
       this.findOrder(this.page,this.pageSize,e.mp.detail.key)
     },
@@ -161,8 +178,29 @@ export default {
       }
     }
   },
+   onReachBottom() {
+    console.log("触底了");
+    // if(this.isBottom){
+    //   return
+    // }else{
+       this.findOrder(++this.page,this.pageSize,this.current)
+    // }
+   
+  },
   onShow() {
     this.findOrder(this.page,this.pageSize,"待付款")
+  }, 
+   onHide() {
+    // debugger
+          this.current= "待付款"
+          this.orderList=[]
+          this.isBottom=false
+  },
+  onUnload() {
+this.current= "待付款"
+this.orderList=[]
+this.isBottom=false
+    // debugger
   }
 };
 </script>

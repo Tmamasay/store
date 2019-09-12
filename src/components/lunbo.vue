@@ -33,8 +33,12 @@ export default {
     };
   },
   mounted() {
-	this.imageLoad();
-	this.getAdvertise()
+  this.imageLoad();
+  this.getAdvertise()
+	
+  },
+  onShow() {
+    this.getAdvertise()
   },
   methods: {
     navjumps(e) {

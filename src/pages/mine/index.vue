@@ -187,25 +187,48 @@ export default {
   },
   methods: {
     goBill(){
-      wx.navigateTo({
+      if(getToken()){
+         wx.navigateTo({
         url: "/pages/mine/comOrders/main" //订单界面
       });
+      }else{
+        this.loginIn()
+
+      }
+     
 
     },
     login(){
-      wx.navigateTo({
+         wx.navigateTo({
         url: "/pages/login/main" //登录页面
-      });
+        });
+    },
+    loginIn(){
+       wx.showToast({ title: "未登录", icon:"none", duration: 1000 });
+       setTimeout(() => {
+         wx.navigateTo({
+        url: "/pages/login/main" //登录页面
+        });
+       }, 1000);
+  
     },
     goAdress() {
+      if(getToken()){
       wx.navigateTo({
         url: "/pages/mine/address/main" //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
       });
+      }else{
+        this.loginIn()
+      }
     },
     goInoculation(){
+        if(getToken()){
        wx.navigateTo({
         url: "/pages/mine/inoculation/main" //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
       });
+    }else{
+      this.loginIn()
+    }
     }
   },
   onShow() {
@@ -363,7 +386,7 @@ export default {
   flex: 1;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1rpx solid rgba(153, 153, 153, 0.51);
+  border-bottom: 1rpx solid rgba(153, 153, 153, 0.3);
 }
 .listMe .lmImgCo {
   flex: 0 0 8%;

@@ -1,5 +1,6 @@
 const TokenKey = 'Admin-Token'
 const Userinfo='user_info'
+const UserId='user_id'
 
 export function getToken() {
 //   return Cookies.get(TokenKey)
@@ -39,3 +40,17 @@ export function getUserinfo() {
   //   return Cookies.remove(TokenKey)
     return wx.removeStorageSync(Userinfo)
   }
+
+  //用户token
+  export function getUserId() {
+    //   return Cookies.get(TokenKey)
+      return wx.getStorageSync(UserId)
+    }
+  export function setUserId(userid) {
+      //   return Cookies.set(TokenKey, token)
+       try {
+          return wx.setStorageSync(UserId,userid)
+        } catch (e) {
+          return this.setstorage(UserId,userid)
+        }
+      }

@@ -86,14 +86,14 @@ export default {
       // multiArray3: [[1, 2, 3, 4, 5, 6, 7, 8, 9], [1, 2, 3, 4, 5, 6, 7, 8, 9], [1, 2, 3, 4, 5, 6, 7, 8, 9]],
       multiArray3: [[], [], []],
       adrArray3: [[], [], []],
-      multiIndex3: ["重庆市", "重庆城区", "南坪区"]
+      multiIndex3: ["北京市", "北京城区", "东城区"]
     };
   },
   created() {
     this.doDistrict("", 0);
-    this.doDistrict("500000", 1);
-    this.doDistrict("500100", 2);
-    // let key_token=this.$store.getters.user.token
+    this.doDistrict("110000", 1);
+    // this.doDistrict("110101", 2);
+    // let key_token=this.$store.getters.user.token 500000
   },
   mounted() {},
   methods: {
@@ -130,7 +130,7 @@ export default {
         .doDelAdr(param)
         .then(res => {
           wx.showToast({
-            title: res.message,
+            title: '删除成功',
             icon: "none",
             duration: 1000
           });
@@ -209,7 +209,7 @@ export default {
           id: this.editId,
           name: this.name,
           phone: this.phone,
-          defaultStatus: this.defaultStatus,
+          defaultStatus: this.defaultStatus?0:1,
           postCode: this.postCode,
           province: this.province,
           city: this.city,

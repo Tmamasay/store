@@ -1,7 +1,9 @@
 {
   "usingComponents": {
     "i-tabs-d": "/static/iView//tabs1/index",
-    "i-tab-d": "/static/iView/tab1/index"
+    "i-tab-d": "/static/iView/tab1/index",
+    "i-load-more": "/static/iView/load-more/index"
 },
-  "navigationBarTitleText": "订单管理"
+  "navigationBarTitleText": "订单管理",
+  "onReachBottom":true
 }
