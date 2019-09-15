@@ -14,7 +14,7 @@
           </div>
         </div>
           <i-cell title="默认地址">
-         <i-switch :value="item.defaultStatus==0?true:false" @change="onChange(item.id,item.defaultStatus)" slot="footer"></i-switch>
+         <i-switch :value="item.defaultStatus==0?true:false"  @change="onChange(item.id,item.defaultStatus)" slot="footer"></i-switch>
          </i-cell>
       </div>
       </div>
@@ -132,7 +132,7 @@ export default {
   margin: 20px auto 0 auto;
 }
 .addRess {
-  background-color: #e61a94;
+  background-color: #fe647e;
   color: #fff;
   width: 150px;
   font-size: 15px;

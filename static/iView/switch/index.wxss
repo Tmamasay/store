@@ -63,8 +63,8 @@
 	}
 	
 	.i-switch-checked {
-		border-color: #E4007F;
-		background-color: #E4007F
+		border-color: #fe647e;
+		background-color: #fe647e
 	}
 	
 	.i-switch-checked .i-switch-inner {

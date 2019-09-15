@@ -677,14 +677,22 @@ export default {
     this.beginYX = "";
     this.numPic=1,
     this.pickSp = [];
-    this.guiGList=[]
+    this.guiGList=[];
+    this.guiGTit={};
+    this.arrAlSp1= [];
+    this.arrAlSp2= [];
+    this. arrAlSp3= [];
   },
   onUnload() {
     this.imgUrls = [];
     this.numPic=1,
     this.beginYX = "";
     this.pickSp = [];
-    this.guiGList=[]
+    this.guiGList=[];
+     this.guiGTit={};
+     this.arrAlSp1= [];
+    this.arrAlSp2= [];
+    this. arrAlSp3= [];
   },
   created() {},
 

@@ -121,7 +121,7 @@
             </div>
           </div>
         </div>
-        <div class="listMe">
+        <div class="listMe" @click="goCommission">
           <div class="lmImgCo">
             <div class="lmImg">
               <img
@@ -131,7 +131,7 @@
               />
             </div>
           </div>
-          <div class="lmCont">客服</div>
+          <div class="lmCont">我的佣金</div>
           <div class="lmRightCo">
             <div class="lmRight">
               <img
@@ -221,6 +221,15 @@ export default {
         this.loginIn()
       }
     },
+    goCommission() {
+      if(getToken()){
+      wx.navigateTo({
+        url: "/pages/mine/commission/main" //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
+      });
+      }else{
+        this.loginIn()
+      }
+    },
     goInoculation(){
         if(getToken()){
        wx.navigateTo({
@@ -241,7 +250,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .contain {
   width: 100%;
   overflow: hidden;

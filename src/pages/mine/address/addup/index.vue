@@ -328,7 +328,7 @@ export default {
 .subm {
   width: 70%;
   margin: 20px auto 0 auto;
-  background-color: #e61a94;
+  background-color: #fe647e;
   color: #fff;
 }
 .subm2 {
