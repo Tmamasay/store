@@ -233,8 +233,31 @@ const doReceive= query=>{
         data: query
     })
 }
-//==============搜索===========
-
+//==============返佣===========
+//查询我的返佣
+const pyramidUserHistory= query=>{
+    return fetch({
+        url:`/api/pyramidUserHistory`,
+        method:'POST', 
+        data: query
+    })
+}
+//全部提现
+const bonusApply= query=>{
+    return fetch({
+        url:`/api/pyramidUserHistory/bonusApply`,
+        method:'POST', 
+        data: query
+    })
+}
+//提现记录 
+const pyramidUserOrder= query=>{
+    return fetch({
+        url:`/api/pyramidUserOrder`,
+        method:'POST', 
+        data: query
+    })
+}
 
 const user={
     getAdvertise,//获取轮播图
@@ -264,7 +287,10 @@ const user={
     doAddStation,//添加孕育信息
     stationfindById,//根据id查询孕育信息
     dostationDel,//删除孕育信息
-    doReceive//确认收货
+    doReceive,//确认收货
+    pyramidUserHistory,//我的返佣
+    bonusApply,//申请提现
+    pyramidUserOrder//提现记录
 
 
 }

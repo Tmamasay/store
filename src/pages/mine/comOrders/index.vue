@@ -17,10 +17,10 @@
         <div class="orderLeft">
           <img :src="item.orderItemList[0].productInfo.pic" alt srcset />
         </div>
-        <p class="middleT">{{item.orderItemList[0].productInfo.subTitle}}a是大叔大叔大叔的撒旦撒打撒大撒</p>
+        <p class="middleT">{{item.orderItemList[0].productInfo.subTitle}}</p>
         <p class="showMo">{{item.payAmount}}</p>
       </div>
-      <p class="playBtn" v-if="current=='待付款'" @click="payTwo(item.orderSn)">立即付款</p>
+      <p class="playBtn" v-if="current=='待付款'" @click="payTwo(item.id)">立即付款</p>
       <p class="playBtn" v-else-if="current=='待发货'">提醒发货</p>
       <p class="playBtn" v-else-if="current=='已发货'" @click="makeOrder(item.id)">确认收货</p>
       <p class="playBtn" v-else-if="current=='已完成'">删除订单</p>
@@ -77,6 +77,7 @@ export default {
               wx.showToast({ title: "操作成功", icon: "success", duration: 1000 });        
               setTimeout(() => {
                 wx.hideToast(); 
+                this.orderList=[]
                 this.findOrder(this.page,this.pageSize,"已发货") 
               }, 1000);
               
@@ -89,7 +90,7 @@ export default {
    payTwo(e){   
      wx.showToast({ title: "支付中", icon: "loading", duration: 1000 });
           const oderLine = {
-            orderSn: e
+            id: e
           };
           this.$api.user
             .weChatUnifiedorder(oderLine)
@@ -171,6 +172,7 @@ export default {
        this.page=1
       this.current = e.mp.detail.key;
       this.findOrder(this.page,this.pageSize,e.mp.detail.key)
+      this.orderList=[]
     },
     switch1Change(e) {
       console.log(e);

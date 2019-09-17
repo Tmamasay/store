@@ -14,6 +14,7 @@
     "pages/mine/inoculation/main",
     "pages/mine/address/addup/main",
     "pages/mine/commission/main",
+    "pages/mine/commission/comdetail/main",
     "pages/mine/inoculation/addcula/main",
     "pages/mine/comOrders/main",
     "pages/mine/about/main",

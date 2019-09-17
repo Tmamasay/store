@@ -5,7 +5,7 @@
     </div>
     <div class>
       <!-- <button class="denglu" @getuserinfo="onGotUserInfo" open-type="getUserInfo">授权微信用户信息</button> -->
-      <form @submit="subFormId" report-submit="true">
+      <form @submit="formSubmit" report-submit="true">
         <!-- <button type='primary' class="confirm" formType="submit" size='mini'>{{btnmsg}}</button> -->
         <button
           formType="submit"
@@ -34,6 +34,26 @@ export default {
     this.bgimg=this.noneimg=`http://${ this.$store.getters.options.attachment_aliyunoss_bucketname}.${this.$store.getters.options.attachment_aliyunoss_endpoint}/attachment/20190911/4cbc12c15a654b85baf36620aff3758a.jpg`
   },
   methods: {
+     formSubmit(e){
+      const formlist=[];
+      formlist.push(e.mp.detail.formId)
+      const parms={
+        formIds:formlist
+      }
+      this.$api.user
+        .doAddFormIds(parms)
+        .then(res => {
+          debugger
+          // wx.hideToast();
+          // debugger
+          // this.addressDefut2 = res.addressUserReceive;
+          // this.addressId2 = res.addressUserReceive.id;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+
+    },
     imageLoad() {
       // var h = 750/300;
       var that = this;

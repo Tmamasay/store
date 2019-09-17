@@ -190,9 +190,10 @@ export default {
         .then(res => {
           if(res.state=='ok'){ 
           // wx.hideToast();
-          // debugger;
+          debugger;
           const oderLine = {
-            orderSn: res.shopOrder.orderSn
+            // orderSn: res.shopOrder.orderSn
+            id: res.shopOrder.id
           };
           this.$api.user
             .weChatUnifiedorder(oderLine)

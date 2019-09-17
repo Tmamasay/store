@@ -98,7 +98,8 @@ export default {
           // wx.hideToast();
           // debugger;
           const oderLine = {
-            orderSn: res.shopOrder.orderSn
+            // orderSn: res.shopOrder.orderSn
+             id: res.shopOrder.id
           };
           this.$api.user
             .weChatUnifiedorder(oderLine)

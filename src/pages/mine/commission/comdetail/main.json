@@ -1,0 +1,11 @@
+{
+  "usingComponents": {
+    "i-cell-group": "/static/iView/cell-group/index",
+    "i-input": "/static/iView//input/index",
+    "i-cell": "/static/iView/cell/index",
+    "i-icon": "/static/iView/icon/index",
+    "i-switch": "/static/iView/switch/index",
+    "i-load-more": "/static/iView/load-more/index"
+},
+  "navigationBarTitleText": "地址管理"
+}
