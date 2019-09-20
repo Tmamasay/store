@@ -20,11 +20,14 @@
         <p class="middleT">{{item.orderItemList[0].productInfo.subTitle}}</p>
         <p class="showMo">{{item.payAmount}}</p>
       </div>
+      <div class="playFor">
       <p class="playBtn" v-if="current=='待付款'" @click="payTwo(item.id)">立即付款</p>
       <p class="playBtn" v-else-if="current=='待发货'">提醒发货</p>
       <p class="playBtn" v-else-if="current=='已发货'" @click="makeOrder(item.id)">确认收货</p>
-      <p class="playBtn" v-else-if="current=='已完成'">删除订单</p>
-      <p class="playBtn" v-else-if="current=='已关闭'">删除订单</p>
+      <!-- <p class="playBtn" v-else-if="current=='已完成'">删除订单</p>
+      <p class="playBtn" v-else-if="current=='已关闭'">删除订单</p> -->
+      <p class="playBtn" v-if="current=='已发货'||current=='已完成'" style="margin-left:5px" @click="findWuLiu(item)">查看物流</p>
+      </div>
       
     </div>
     </div>
@@ -85,6 +88,13 @@ export default {
             .catch(err => {
               console.log(err);
             });
+
+    },
+    findWuLiu(e){
+      debugger
+      wx.navigateTo({
+        url: `/pages/mine/comOrders/logistics/main?deliveryCompany=${e.deliveryCompany}&deliverySn=${e.deliverySn}` //注意switchTab只能跳转到带有tab的页面，不能跳转到不带tab的页面
+      });
 
     },
    payTwo(e){   
@@ -292,5 +302,10 @@ font-weight:400;
 color:rgba(34,34,34,1);
 text-align: center
 
+}
+.playFor{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center
 }
 </style>

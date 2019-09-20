@@ -141,6 +141,14 @@ const shopCartItem= query=>{
         data: query
     })
 }
+//删除购物车
+const doDelShopCart= query=>{
+    return fetch({
+        url:`/api/shopCartItem/doDel`,
+        method:'POST',
+        data: query
+    })
+}
 //计算购物车价格
 const doPrice= query=>{
     return fetch({
@@ -258,6 +266,14 @@ const pyramidUserOrder= query=>{
         data: query
     })
 }
+//收益明细 
+const findByUser= query=>{
+    return fetch({
+        url:`/api/pyramidUserHistory/findByUser`,
+        method:'POST', 
+        data: query
+    })
+}
 
 const user={
     getAdvertise,//获取轮播图
@@ -276,6 +292,7 @@ const user={
     findByProductId,//通过ID获取商品规格
     findByIdDetail,//通过ID获取商品详情 不含规格
     doAddShopCart,//添加到购物车
+    doDelShopCart,//删除数据库
     shopOrder,//商品下单
     weChatUnifiedorder,//微信支付
     doAddFormIds,//上传formid
@@ -290,7 +307,8 @@ const user={
     doReceive,//确认收货
     pyramidUserHistory,//我的返佣
     bonusApply,//申请提现
-    pyramidUserOrder//提现记录
+    pyramidUserOrder,//提现记录
+    findByUser//收益明细
 
 
 }

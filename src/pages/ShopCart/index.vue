@@ -1,7 +1,8 @@
 <template>
   <div>
+    <div v-if="shopCartList.length">
     <checkbox-group @change="checkboxChange"  >
-      <div class="checkbox contAll" v-for="item in shopCartList" :key="item.id">
+      <div class="checkbox contAll" v-for="item in shopCartList" :key="item.id" >
         <checkbox :value="item.id"  color="#fe647e" />
         <!-- {{item.value}} -->
         <!-- <div class="cartRight"> -->
@@ -14,7 +15,7 @@
           <div class="firstLine">
           <span class="orderTit">{{item.shopProduct.subTitle}}</span>
           <!-- <p class="orderTit">发生地方的说法发生地方的说法发生的发生的佛挡杀佛收到范德萨</p> -->
-          <div class="delCart"><img src="../../../static/images/del.png" alt="" srcset=""></div>
+          <div class="delCart" @click="doDelShopCart(item.id)"><img src="../../../static/images/del.png" alt="" srcset=""></div>
           </div>
           <!-- <span class="orderTit">萨达撒多大电商阿达撒大电商阿达萨达啊大的</span> -->
           <p class="guig">{{item.shopSkuStock.sp1}}{{item.shopSkuStock.sp2}}{{item.shopSkuStock.sp3}}</p>
@@ -43,6 +44,14 @@
 
      </div>
    </div>
+   </div>
+   <div v-else>
+      <div class="noneImg">
+        <!-- <img src="../../../../static/images/none.png" alt=""> -->
+        <img :src="noneimg" alt="">
+      </div>
+      <p class="titNone">您暂时没有订单哟～</p>
+    </div>
   </div>
 </template>
 
@@ -65,6 +74,23 @@ export default {
   computed: {},
   components: {},
   methods: {
+     doDelShopCart(id) {
+      wx.showToast({ title: "", icon: "loading", duration: 1000 });
+       this.$api.user
+        .doDelShopCart({
+          id:id
+        })
+        .then(res => {
+          wx.hideToast();
+          // debugger
+          this.shopCartItem();
+          // this.addressDefut2 = res.addressUserReceive;
+          // this.addressId = res.addressUserReceive.id;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     getDefaultAddress() {
       wx.showToast({ title: "", icon: "loading", duration: 1000 });
        this.$api.user
@@ -112,9 +138,10 @@ export default {
                 signType: "MD5",
                 paySign: res.map.paySign,
                 success: function(res) {
-                  console.log(res);
+                  // console.log(res);
+                 console.log(res);
                   wx.redirectTo({
-                  	url: '/pages/learn/commlist/main'
+                  	url: '/pages/learn/success/main'
                   })
                   // that.defult = 0;
                   that.isdisabled = false;
@@ -123,6 +150,9 @@ export default {
                   // wx.redirectTo({
                   // 	url: '/pages/storefk/payfailure/main'
                   // })
+                  wx.redirectTo({
+                  	url: '/pages/learn/fail/main'
+                  })
                   that.isdisabled = false;
                 },
                 complete: function(res) {
@@ -241,6 +271,15 @@ export default {
   onShow() {
     this.shopCartItem();
     this.getDefaultAddress()
+  },
+   onHide() {
+     this.isdisabled = false;
+ 
+  },
+  onUnload() {
+    this.isdisabled = false;
+
+    // debugger
   }
 };
 </script>

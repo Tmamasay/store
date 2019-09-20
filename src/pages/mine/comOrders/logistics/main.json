@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "i-steps": "/static/iView/steps/index",
+    "i-step": "/static/iView/step/index"
+},
+  "navigationBarTitleText": "物流助手"
+}

@@ -30,7 +30,7 @@
         </p>
       </div>
     </div>
-    <div class="listMe">
+    <div class="listMe" @click="totSource">
       <div class="lmImgCo">
         <div class="lmImg">
           <img
@@ -107,6 +107,11 @@ export default {
   },
   created() {},
   methods: {
+    totSource(){
+       wx.navigateTo({
+        url: "/pages/mine/commission/sourcemoney/main" //登录页面
+      });
+    },
     totRecord() {
       // debugger;
       wx.navigateTo({
@@ -136,7 +141,7 @@ export default {
             icon: "success",
             duration: 1000
           });
-          
+          this.pyramidUserHistory();
           // wx.hideToast();
           // debugger
           // this.addressDefut2 = res.addressUserReceive;
